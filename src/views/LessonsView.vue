@@ -397,7 +397,7 @@
 /* eslint-disable no-unused-vars */
 import { ref, onMounted, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // Props
 const props = defineProps({
@@ -442,7 +442,7 @@ const fetchLessons = async () => {
 
     // Note: userId=1 is for testing only, will come from Vuex later
     const userId = 1;
-    const response = await axios.get(
+    const response = await apiClient.get(
       `/api/EducationalContent/units/${props.unitId}/lessons?userId=${userId}`
     );
 

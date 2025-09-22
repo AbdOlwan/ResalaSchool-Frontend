@@ -126,7 +126,7 @@
 import { ref, onMounted, computed, markRaw } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 import MultipleChoiceQuestion from "../components/quiz/MultipleChoiceQuestion.vue";
 import FillInTheBlankQuestion from "../components/quiz/FillInTheBlankQuestion.vue";
 import QuizResults from "../components/quiz/QuizResults.vue";
@@ -214,7 +214,7 @@ const fetchQuiz = async () => {
 
   try {
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    const response = await axios.get(
+    const response = await apiClient.get(
       `/api/Exercises/lesson/${props.lessonId}/quiz?count=5`
     );
     if (response.data.success && response.data.data.length > 0) {
@@ -264,7 +264,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.post(
+    const response = await apiClient.post(
       `/api/Exercises/submit?userId=${userId}`,
       payload
     );

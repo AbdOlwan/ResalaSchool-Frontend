@@ -358,7 +358,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // Props
 const props = defineProps({
@@ -399,7 +399,7 @@ const fetchUnits = async () => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    const response = await axios.get(
+    const response = await apiClient.get(
       `/api/EducationalContent/courses/${props.courseId}/units`
     );
 

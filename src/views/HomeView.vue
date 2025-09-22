@@ -252,7 +252,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // --- State Management ---
 const phases = ref([]);
@@ -266,7 +266,7 @@ const fetchPhases = async () => {
   try {
     isLoading.value = true;
     apiError.value = null;
-    const response = await axios.get("/api/EducationalContent/phases");
+    const response = await apiClient.get("/api/EducationalContent/phases");
 
     if (response.data && response.data.success) {
       phases.value = response.data.data;

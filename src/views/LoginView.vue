@@ -293,7 +293,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 import { useStore } from "vuex";
 
 // State Management
@@ -365,7 +365,7 @@ const handleLogin = async () => {
     // Add a small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    const response = await axios.post("/api/auth/login", {
+    const response = await apiClient.post("/api/auth/login", {
       email: email.value,
       password: password.value,
     });

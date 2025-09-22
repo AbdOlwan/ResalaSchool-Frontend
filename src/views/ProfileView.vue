@@ -447,7 +447,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // --- State Management ---
 const store = useStore();
@@ -590,8 +590,10 @@ const fetchProfileData = async () => {
     // Add loading delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const profilePromise = axios.get(`/api/auth/${userId}/profile`);
-    const progressPromise = axios.get(`/api/users/${userId}/progress/lessons`);
+    const profilePromise = apiClient.get(`/api/auth/${userId}/profile`);
+    const progressPromise = apiClient.get(
+      `/api/users/${userId}/progress/lessons`
+    );
 
     const [profileResponse, progressResponse] = await Promise.all([
       profilePromise,
@@ -725,6 +727,7 @@ onMounted(() => {
   fetchProfileData();
 });
 </script>
+
 <style scoped>
 /* Base Styles */
 .profile-adventure-page {

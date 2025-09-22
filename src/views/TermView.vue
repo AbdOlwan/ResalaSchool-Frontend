@@ -340,7 +340,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // --- State Management ---
 const terms = ref([]);
@@ -413,7 +413,7 @@ const fetchTerms = async () => {
     // Add some loading delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const response = await axios.get(
+    const response = await apiClient.get(
       `/api/EducationalContent/grades/${gradeId}/terms`
     );
 

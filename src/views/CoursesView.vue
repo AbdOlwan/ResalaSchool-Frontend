@@ -392,7 +392,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // Props to get parameters from the URL
 const props = defineProps({
@@ -457,7 +457,7 @@ const fetchCourses = async () => {
     const gradeId = props.gradeId;
     const termId = props.termId;
 
-    const response = await axios.get(
+    const response = await apiClient.get(
       `/api/EducationalContent/courses?gradeId=${gradeId}&termId=${termId}`
     );
 

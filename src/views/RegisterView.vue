@@ -345,7 +345,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 // State Management
 const fullName = ref("");
@@ -449,7 +449,7 @@ const handleRegister = async () => {
     // Add a small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const response = await axios.post("/api/auth/register", {
+    const response = await apiClient.post("/api/auth/register", {
       fullName: fullName.value,
       email: email.value,
       password: password.value,

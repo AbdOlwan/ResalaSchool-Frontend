@@ -203,7 +203,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "@/services/api.js";
 
 const props = defineProps({
   lessonId: [String, Number],
@@ -237,7 +237,7 @@ const fetchLessonDetails = async () => {
   isLoading.value = true;
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000)); // UX Delay
-    const response = await axios.get(
+    const response = await apiClient.get(
       `/api/EducationalContent/lessons/${props.lessonId}`
     );
     if (response.data.success) {
