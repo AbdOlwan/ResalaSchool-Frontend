@@ -1,1 +1,4 @@
-/api/* http://resalaschool.runasp.net/api/:splat  200
+
+/api/* http://resalaschool.runasp.net/api/:splat   200
+
+/* /index.html                            200
