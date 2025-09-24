@@ -18,21 +18,19 @@
       <v-row justify="center" align="center">
         <v-col cols="12" md="10" lg="8">
           <div class="mascot-container mb-6">
-            <div class="mascot-main bounce-animation" @click="playMascotSound">
-              🦉
-            </div>
+            <div class="mascot-main" @click="playMascotSound">🦉</div>
             <div class="mascot-friends">
               <div class="friend friend-1 orbit-animation">🦄</div>
               <div class="friend friend-2 orbit-animation">🐸</div>
               <div class="friend friend-3 orbit-animation">🦋</div>
             </div>
-            <div class="mascot-speech-bubble pulse-animation">
+            <div class="mascot-speech-bubble">
               <span class="speech-text">Choose Your Learning Adventure!</span>
               <div class="bubble-sparkles">✨💫✨</div>
             </div>
           </div>
 
-          <h1 class="hero-title rainbow-text mb-4 title-bounce">
+          <h1 class="hero-title static-gradient-text mb-4 title-bounce">
             🌟 Explore Amazing Courses! 🌟
           </h1>
 
@@ -43,9 +41,9 @@
 
           <div class="journey-progress mb-6">
             <div class="progress-step completed">🏠 Home</div>
-            <div class="progress-arrow bounce-arrow">➜</div>
+            <div class="progress-arrow">➜</div>
             <div class="progress-step completed">📚 Grade Selected</div>
-            <div class="progress-arrow bounce-arrow">➜</div>
+            <div class="progress-arrow">➜</div>
             <div class="progress-step current glow-effect">
               📖 Choose Course
             </div>
@@ -75,7 +73,7 @@
             <h2 class="section-title gradient-text">
               Ready to Become a Learning Superhero?
             </h2>
-            <div class="title-underline rainbow-underline"></div>
+            <div class="title-underline static-underline"></div>
             <p class="section-subtitle mt-4">
               Each course is packed with fun activities, exciting games, and
               amazing discoveries!
@@ -88,7 +86,7 @@
         <v-col cols="12" class="text-center mb-6">
           <div class="loading-mascot">
             <div class="loading-character spin-animation">🎪</div>
-            <h3 class="loading-text rainbow-text">
+            <h3 class="loading-text static-gradient-text">
               Preparing Your Magical Classroom...
             </h3>
             <div class="loading-dots">
@@ -176,9 +174,9 @@
                 ></div>
 
                 <div class="card-floaters">
-                  <div class="floater star rotate-animation">⭐</div>
-                  <div class="floater heart pulse-animation">💖</div>
-                  <div class="floater magic float-animation">✨</div>
+                  <div class="floater star">⭐</div>
+                  <div class="floater heart">💖</div>
+                  <div class="floater magic">✨</div>
                 </div>
 
                 <div class="course-image-container">
@@ -189,6 +187,12 @@
                     height="180px"
                     cover
                   >
+                    <template v-slot:placeholder>
+                      <v-skeleton-loader
+                        type="image"
+                        class="h-100"
+                      ></v-skeleton-loader>
+                    </template>
                     <div class="image-overlay">
                       <div class="course-level-badge">
                         <span class="level-icon">{{
@@ -247,7 +251,7 @@
                   <div class="course-progress mt-auto mb-4">
                     <div class="progress-label">🌟 Ready for Adventure!</div>
                     <div class="progress-bar-container">
-                      <div class="progress-bar rainbow-progress">
+                      <div class="progress-bar static-progress">
                         <div
                           class="progress-fill"
                           :style="{ width: getProgressWidth(index) }"
@@ -296,7 +300,7 @@
       >
         <v-col cols="12" md="8" class="text-center">
           <div class="no-courses-container">
-            <div class="no-courses-character bounce-animation">🔍</div>
+            <div class="no-courses-character">🔍</div>
             <h3 class="no-courses-title">No Adventures Found Yet!</h3>
             <p class="no-courses-message">
               Don't worry! New exciting courses are being prepared for you.
@@ -319,16 +323,16 @@
         <v-col cols="12" md="10" lg="8" class="text-center">
           <div class="motivation-section">
             <div class="motivation-characters">
-              <div class="main-character pulse-animation">🌟</div>
+              <div class="main-character">🌟</div>
               <div class="supporting-characters">
-                <span class="support-char char-1 float-animation">🦸</span>
-                <span class="support-char char-2 bounce-animation">🧙</span>
-                <span class="support-char char-3 rotate-animation">🎪</span>
-                <span class="support-char char-4 pulse-animation">🎨</span>
+                <span class="support-char char-1">🦸</span>
+                <span class="support-char char-2">🧙</span>
+                <span class="support-char char-3">🎪</span>
+                <span class="support-char char-4">🎨</span>
               </div>
             </div>
 
-            <h3 class="motivation-title rainbow-text">
+            <h3 class="motivation-title static-gradient-text">
               You're Going to Be AMAZING!
             </h3>
 
@@ -345,7 +349,7 @@
                 v-for="(badge, idx) in motivationMessages"
                 :key="idx"
               >
-                <div class="badge-emoji bounce-on-hover">{{ badge.emoji }}</div>
+                <div class="badge-emoji">{{ badge.emoji }}</div>
                 <div class="badge-message">{{ badge.message }}</div>
               </div>
             </div>
@@ -353,28 +357,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <div v-if="showCelebration" class="celebration-overlay">
-      <div class="celebration-content">
-        <div class="celebration-character bounce-in-scale">🎉</div>
-        <h2 class="celebration-title rainbow-text">Fantastic Choice!</h2>
-        <p class="celebration-message">
-          🚀 Get ready for an incredible learning adventure filled with fun,
-          games, and amazing discoveries!
-        </p>
-        <div class="celebration-stars">
-          <span class="celebration-star" v-for="n in 5" :key="n">⭐</span>
-        </div>
-      </div>
-      <div class="confetti-container">
-        <div
-          class="confetti"
-          v-for="n in 100"
-          :key="n"
-          :style="getConfettiStyle(n)"
-        ></div>
-      </div>
-    </div>
 
     <div class="success-messages">
       <div
@@ -390,11 +372,21 @@
 </template>
 
 <script setup>
+/* eslint-disable no-unused-vars */
+
 import { ref, onMounted, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import apiClient from "@/services/api.js";
 
-// Props to get parameters from the URL
+// --- State Management for Mute Functionality ---
+// This assumes you have a Pinia store setup like `stores/app.js`
+// with a state property `isMuted: boolean`. This provides global mute control.
+// Example: `export const useAppStore = defineStore('app', { state: () => ({ isMuted: false }) })`
+// import { useAppStore } from "@/stores/app";
+// const appStore = useAppStore();
+// For demonstration purposes, a local ref is used here.
+const isMuted = ref(false); // Replace with `appStore.isMuted`
+
 const props = defineProps({
   phaseId: [Number, String],
   gradeId: [Number, String],
@@ -402,18 +394,14 @@ const props = defineProps({
 });
 
 const router = useRouter();
-// eslint-disable-next-line no-unused-vars
 const route = useRoute();
 
-// State Management
 const isLoading = ref(true);
 const apiError = ref(null);
 const courses = ref([]);
-const showCelebration = ref(false);
 const successMessages = ref([]);
 const floatingShapes = ref([]);
 
-// UI Data
 const cardThemes = [
   { color: "teal-darken-2", gradient: "teal-ocean", icon: "🌊" },
   { color: "deep-purple-accent-3", gradient: "purple-magic", icon: "🔮" },
@@ -438,7 +426,6 @@ const motivationMessages = [
   { emoji: "🎯", message: "Goal Achiever" },
 ];
 
-// API Functions
 const fetchCourses = async () => {
   isLoading.value = true;
   apiError.value = null;
@@ -451,7 +438,6 @@ const fetchCourses = async () => {
   }
 
   try {
-    // Add loading delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
     const gradeId = props.gradeId;
@@ -477,30 +463,26 @@ const fetchCourses = async () => {
   }
 };
 
-// Navigation
-const selectCourse = async (courseId) => {
+// --- Navigation Refactor ---
+// CRITICAL: Removed artificial setTimeout delay. Navigation is now instantaneous.
+// The celebration overlay was removed as it created a fake waiting period.
+// The ideal UX is for the *next* page ('Units') to show a loading/celebration
+// screen while it fetches its own data, not to add a delay here.
+const selectCourse = (courseId) => {
   playClickSound();
   showSuccessMessage("Amazing Choice! 🌟");
 
-  // Show celebration
-  showCelebration.value = true;
-
-  // Navigate after celebration
-  setTimeout(() => {
-    showCelebration.value = false;
-    router.push({
-      name: "Units",
-      params: {
-        phaseId: props.phaseId,
-        gradeId: props.gradeId,
-        termId: props.termId,
-        courseId: courseId,
-      },
-    });
-  }, 3000);
+  router.push({
+    name: "Units",
+    params: {
+      phaseId: props.phaseId,
+      gradeId: props.gradeId,
+      termId: props.termId,
+      courseId: courseId,
+    },
+  });
 };
 
-// UI Helper Functions
 const getCourseIcon = (index) => {
   const icons = ["📚", "🔬", "🎨", "🌍", "🎵", "💻", "🏃", "🎭"];
   return icons[index % icons.length];
@@ -564,31 +546,12 @@ const getParticleStyle = (index) => {
   };
 };
 
-const getConfettiStyle = (index) => {
-  const colors = [
-    "#FFD700",
-    "#FF6B6B",
-    "#4ECDC4",
-    "#45B7D1",
-    "#96CEB4",
-    "#FFEAA7",
-  ];
-  return {
-    left: Math.random() * 100 + "%",
-    backgroundColor: colors[index % colors.length],
-    animationDelay: Math.random() * 3 + "s",
-    animationDuration: Math.random() * 2 + 3 + "s",
-  };
-};
-
-// Sound Effects
-const playMascotSound = () => playSound("welcome");
-const playHoverSound = () => playSound("hover");
-const playClickSound = () => playSound("click");
-const playSuccessSound = () => playSound("success");
-const playErrorSound = () => playSound("error");
-
+// --- Sound Effects with Mute Check ---
+// Refactored: Added a check for the global `isMuted` state at the start of the function.
 const playSound = (type) => {
+  // Logic Change: Check if sound is muted before playing anything.
+  if (isMuted.value) return;
+
   try {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -642,7 +605,12 @@ const playSound = (type) => {
   }
 };
 
-// Success Messages
+const playMascotSound = () => playSound("welcome");
+const playHoverSound = () => playSound("hover");
+const playClickSound = () => playSound("click");
+const playSuccessSound = () => playSound("success");
+const playErrorSound = () => playSound("error");
+
 const showSuccessMessage = (text) => {
   const message = {
     id: Date.now(),
@@ -652,16 +620,13 @@ const showSuccessMessage = (text) => {
       top: Math.random() * 60 + 20 + "%",
     },
   };
-
   successMessages.value.push(message);
-
   setTimeout(() => {
     const index = successMessages.value.findIndex((m) => m.id === message.id);
     if (index > -1) successMessages.value.splice(index, 1);
   }, 3000);
 };
 
-// Lifecycle
 onMounted(async () => {
   generateFloatingShapes();
   await fetchCourses();
@@ -669,7 +634,6 @@ onMounted(async () => {
   animateCourseCards();
 });
 
-// Animation Functions
 const animateCourseCards = () => {
   const cards = document.querySelectorAll(".course-card-wrapper");
   cards.forEach((card, index) => {
@@ -679,20 +643,22 @@ const animateCourseCards = () => {
   });
 };
 
+// --- Animation Refactor ---
+// Reduced shape count from 30 to 8 and increased animation duration
+// for a calmer, less visually cluttered background.
 const generateFloatingShapes = () => {
   const emojis = ["⭐", "💖", "🚀", "📚", "🏆", "✨"];
   const shapes = [];
-  for (let i = 0; i < 30; i++) {
-    // Total 30 shapes
+  for (let i = 0; i < 8; i++) {
     shapes.push({
       id: `shape-${i}`,
       emoji: emojis[i % emojis.length],
       style: {
         left: `${Math.random() * 100}vw`,
         top: `${Math.random() * 100}vh`,
-        fontSize: `${Math.random() * 1.5 + 0.5}rem`, // 0.5rem to 2rem
-        animationDuration: `${Math.random() * 20 + 15}s`, // 15s to 35s
-        animationDelay: `${Math.random() * 15}s`,
+        fontSize: `${Math.random() * 1.5 + 0.5}rem`,
+        animationDuration: `${Math.random() * 25 + 20}s`, // Slower: 20s to 45s
+        animationDelay: `${Math.random() * 20}s`,
       },
     });
   }
@@ -701,15 +667,17 @@ const generateFloatingShapes = () => {
 </script>
 
 <style scoped>
-/* General Page Setup */
+/* General Page Setup & Font Change */
 .courses-adventure-page {
   position: relative;
-  overflow-x: hidden; /* Prevent horizontal scrollbar */
+  overflow-x: hidden;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
+  /* Refactored: Main font is now Cairo for readability */
+  font-family: "Cairo", sans-serif;
 }
 
-/* --- Floating Background Elements (FIXED) --- */
+/* --- Floating Background Elements --- */
 .floating-elements {
   position: fixed;
   top: 0;
@@ -734,7 +702,7 @@ const generateFloatingShapes = () => {
   }
   10%,
   90% {
-    opacity: 0.7;
+    opacity: 0.6;
   }
   100% {
     transform: translateY(-20vh) rotate(360deg);
@@ -756,7 +724,13 @@ const generateFloatingShapes = () => {
 .mascot-main {
   font-size: 7rem;
   cursor: pointer;
+  transition: transform 0.3s ease-in-out;
 }
+/* Refactored: Looping bounce animation replaced with hover effect */
+.mascot-main:hover {
+  transform: translateY(-10px) rotate(5deg);
+}
+
 .mascot-friends .friend {
   position: absolute;
   font-size: 2rem;
@@ -764,19 +738,20 @@ const generateFloatingShapes = () => {
 .friend-1 {
   top: 0;
   left: -40px;
-  animation-duration: 8s;
+  animation-duration: 12s; /* Slower */
 }
 .friend-2 {
   top: 50%;
   left: -60px;
-  animation-duration: 12s;
+  animation-duration: 18s; /* Slower */
 }
 .friend-3 {
   bottom: 0;
   left: -30px;
-  animation-duration: 10s;
+  animation-duration: 15s; /* Slower */
 }
 
+/* Refactored: Slowed down orbit animation */
 @keyframes orbit-animation {
   0% {
     transform: rotate(0deg) translateX(60px) rotate(0deg);
@@ -790,7 +765,6 @@ const generateFloatingShapes = () => {
   position: absolute;
   bottom: 120%;
   left: 50%;
-  transform: translateX(-50%);
   background-color: #fff;
   border-radius: 20px;
   padding: 10px 20px;
@@ -801,6 +775,7 @@ const generateFloatingShapes = () => {
   font-size: 1.2rem;
   opacity: 0;
   animation: pulse-in 1s ease-in-out forwards 1.5s;
+  transform: translateX(-50%);
 }
 
 .mascot-speech-bubble::after {
@@ -836,42 +811,25 @@ const generateFloatingShapes = () => {
 }
 
 @keyframes sparkle-glow {
-  0%,
-  100% {
-    text-shadow: 0 0 5px #fff, 0 0 10px #f093fb, 0 0 15px #f093fb;
-  }
   50% {
     text-shadow: 0 0 10px #fff, 0 0 20px #f093fb, 0 0 30px #f093fb;
   }
 }
 
 .hero-title {
+  /* Refactored: Bungee font is reserved for H1/major titles */
   font-family: "Bungee", cursive;
   font-size: clamp(2rem, 6vw, 4.5rem);
   text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
   letter-spacing: 2px;
 }
 
-.rainbow-text {
-  background: linear-gradient(
-    90deg,
-    #ff6b6b,
-    #feca57,
-    #48dbfb,
-    #1dd1a1,
-    #ff6b6b
-  );
+/* Refactored: Removed animated rainbow text, replaced with static gradient */
+.static-gradient-text {
+  background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  animation: rainbow-anim 4s linear infinite;
-}
-
-@keyframes rainbow-anim {
-  to {
-    background-position: 200% center;
-  }
 }
 
 .title-bounce {
@@ -893,7 +851,7 @@ const generateFloatingShapes = () => {
 }
 
 .hero-subtitle {
-  font-family: "Poppins", sans-serif;
+  /* Font changed to Cairo */
   font-size: clamp(1rem, 2.5vw, 1.5rem);
   color: #fff;
   opacity: 0;
@@ -918,7 +876,6 @@ const generateFloatingShapes = () => {
   border-radius: 50px;
   backdrop-filter: blur(5px);
   border: 2px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .progress-step {
@@ -927,12 +884,10 @@ const generateFloatingShapes = () => {
   background-color: rgba(255, 255, 255, 0.3);
   color: #fff;
   font-weight: bold;
-  transition: all 0.3s ease;
   font-size: clamp(0.8rem, 2vw, 1rem);
 }
 .progress-step.completed {
   background-color: #1dd1a1;
-  box-shadow: 0 0 10px #1dd1a1;
   transform: scale(1.05);
 }
 .progress-step.current {
@@ -944,23 +899,15 @@ const generateFloatingShapes = () => {
 }
 @keyframes glow {
   from {
-    box-shadow: 0 0 5px #feca57, 0 0 10px #feca57;
+    box-shadow: 0 0 5px #feca57;
   }
   to {
-    box-shadow: 0 0 15px #feca57, 0 0 25px #feca57;
+    box-shadow: 0 0 20px #feca57;
   }
 }
 .progress-arrow {
   color: #fff;
   font-size: 1.5rem;
-}
-.bounce-arrow {
-  animation: bounce-arrow 1.5s ease-in-out infinite;
-}
-@keyframes bounce-arrow {
-  50% {
-    transform: translateX(5px);
-  }
 }
 
 /* Achievement Badges */
@@ -977,7 +924,6 @@ const generateFloatingShapes = () => {
   flex-direction: column;
   align-items: center;
   color: #fff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .badge-icon {
@@ -986,10 +932,7 @@ const generateFloatingShapes = () => {
   transition: transform 0.3s ease;
 }
 
-.badge-icon:hover {
-  transform: scale(1.2);
-}
-
+/* Refactored: Spin animation only on hover */
 .spin-on-hover:hover {
   animation: spin 0.8s ease-in-out;
 }
@@ -1021,7 +964,7 @@ const generateFloatingShapes = () => {
   background-color: #fff;
   padding: 30px;
   border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   z-index: 5;
   border: 4px solid #feca57;
 }
@@ -1046,16 +989,14 @@ const generateFloatingShapes = () => {
   border-radius: 3px;
 }
 
-.rainbow-underline {
+/* Refactored: Replaced animated underline with static gradient */
+.static-underline {
   background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1);
-  background-size: 200% auto;
-  animation: rainbow-anim 4s linear infinite;
 }
 
 .section-subtitle {
   font-size: clamp(0.9rem, 2vw, 1.2rem);
   color: #555;
-  line-height: 1.4;
 }
 
 .encouragement-character {
@@ -1074,11 +1015,9 @@ const generateFloatingShapes = () => {
 @keyframes bounce-in {
   0% {
     transform: translateX(-50%) scale(0);
-    opacity: 0;
   }
   60% {
     transform: translateX(-50%) scale(1.2);
-    opacity: 1;
   }
   100% {
     transform: translateX(-50%) scale(1);
@@ -1094,9 +1033,6 @@ const generateFloatingShapes = () => {
   50% {
     transform: rotate(180deg) scale(1.1);
   }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
 }
 .loading-text {
   font-size: 2rem;
@@ -1109,9 +1045,6 @@ const generateFloatingShapes = () => {
   border-radius: 50%;
   animation: dot-pulse 1.5s ease-in-out infinite;
 }
-.dot-1 {
-  animation-delay: 0s;
-}
 .dot-2 {
   animation-delay: 0.2s;
 }
@@ -1121,7 +1054,6 @@ const generateFloatingShapes = () => {
 @keyframes dot-pulse {
   50% {
     transform: scale(1.5);
-    opacity: 1;
   }
 }
 .loading-card {
@@ -1149,7 +1081,6 @@ const generateFloatingShapes = () => {
     left: 100%;
   }
 }
-
 .error-character {
   font-size: 5rem;
   animation: shake 0.5s infinite alternate;
@@ -1163,7 +1094,7 @@ const generateFloatingShapes = () => {
   background-color: #fff;
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   margin-top: -30px;
   border: 4px solid #ff6b6b;
 }
@@ -1178,12 +1109,6 @@ const generateFloatingShapes = () => {
 }
 
 /* --- Courses Grid --- */
-.courses-grid {
-  margin-top: 50px;
-}
-.course-col {
-  padding: 12px;
-}
 .course-card-wrapper {
   transform: translateY(20px);
   opacity: 0;
@@ -1208,6 +1133,42 @@ const generateFloatingShapes = () => {
 .course-card--hover {
   transform: translateY(-8px) scale(1.03);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+}
+.card-floaters {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.floater {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.floater.star {
+  top: 20%;
+  left: -10px;
+}
+.floater.heart {
+  bottom: 60%;
+  right: -15px;
+}
+.floater.magic {
+  bottom: 20%;
+  left: 0;
+}
+/* Refactored: Card floater animations now only trigger on parent hover */
+.course-card--hover .floater {
+  opacity: 1;
+}
+.course-card--hover .floater.star {
+  transform: translateY(-10px) rotate(-15deg);
+}
+.course-card--hover .floater.heart {
+  transform: translateY(-5px) scale(1.2);
+}
+.course-card--hover .floater.magic {
+  transform: translateY(10px);
 }
 .card-glow {
   position: absolute;
@@ -1279,9 +1240,6 @@ const generateFloatingShapes = () => {
 .star.empty {
   color: rgba(255, 255, 255, 0.6);
 }
-.card-content {
-  padding: 16px;
-}
 .course-title {
   font-family: "Bungee", cursive;
   font-size: clamp(1.1rem, 3vw, 1.4rem);
@@ -1291,31 +1249,11 @@ const generateFloatingShapes = () => {
   padding: 0;
   color: #333;
 }
+/* Refactored: Font changed to Cairo */
 .course-description {
-  font-family: "Poppins", sans-serif;
   color: #555;
   font-size: 0.9rem;
   margin-top: 10px;
-}
-.fun-facts {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-}
-.fact-item {
-  display: flex;
-  align-items: center;
-  font-size: 0.8rem;
-  color: #777;
-}
-.course-progress {
-  padding: 0 15px;
-}
-.progress-label {
-  font-weight: bold;
-  color: #764ba2;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
 }
 .progress-bar {
   flex-grow: 1;
@@ -1324,18 +1262,9 @@ const generateFloatingShapes = () => {
   border-radius: 10px;
   overflow: hidden;
 }
-.progress-fill {
-  height: 100%;
-}
-.rainbow-progress {
+/* Refactored: Replaced animated progress with static gradient */
+.static-progress {
   background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1);
-  background-size: 200% auto;
-  animation: rainbow-anim 4s linear infinite;
-}
-.progress-percentage {
-  font-weight: bold;
-  color: #764ba2;
-  font-size: 0.9rem;
 }
 .adventure-btn {
   font-family: "Bungee", cursive;
@@ -1347,21 +1276,49 @@ const generateFloatingShapes = () => {
   background-color: rgba(255, 255, 255, 0.9);
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   border: 4px dashed #feca57;
 }
-.no-courses-title {
-  font-family: "Bungee", cursive;
-  color: #764ba2;
+.no-courses-character {
+  font-size: 4rem;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: default;
 }
+/* Refactored: Added hover effect instead of looping animation */
+.no-courses-container:hover .no-courses-character {
+  transform: translateY(-10px) rotate(-10deg);
+}
+
 .motivation-section {
   background: rgba(255, 255, 255, 0.95);
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: 4px solid #1dd1a1;
   margin-top: 50px;
 }
+
+/* Refactored: Character animations now trigger on parent section hover */
+.motivation-characters .main-character,
+.motivation-characters .support-char {
+  display: inline-block;
+  transition: transform 0.3s ease-out;
+}
+.motivation-section:hover .main-character {
+  transform: scale(1.2);
+}
+.motivation-section:hover .char-1 {
+  transform: translateY(-10px);
+}
+.motivation-section:hover .char-2 {
+  transform: rotate(15deg);
+}
+.motivation-section:hover .char-3 {
+  transform: rotate(-15deg);
+}
+.motivation-section:hover .char-4 {
+  transform: scale(1.1) translateY(5px);
+}
+
 .motivation-title {
   font-family: "Bungee", cursive;
   font-size: clamp(2rem, 5vw, 3rem);
@@ -1386,112 +1343,29 @@ const generateFloatingShapes = () => {
 .motivation-badge:hover {
   transform: translateY(-5px);
 }
+/* Refactored: Added hover effect to emoji */
+.motivation-badge .badge-emoji {
+  transition: transform 0.3s ease;
+}
+.motivation-badge:hover .badge-emoji {
+  transform: scale(1.3) rotate(10deg);
+}
+
 .badge-message {
   font-weight: bold;
   color: #764ba2;
 }
-@keyframes bounce-animation {
-  50% {
-    transform: translateY(-15px);
-  }
-}
 
-/* --- Celebration Overlay --- */
-.celebration-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(118, 75, 162, 0.8);
-  backdrop-filter: blur(10px);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fade-in-celebration 0.5s forwards;
-}
-@keyframes fade-in-celebration {
-  to {
-    opacity: 1;
-  }
-}
-.celebration-content {
-  z-index: 101;
-  background: #fff;
-  padding: 40px;
-  border-radius: 20px;
-  max-width: 600px;
-  border: 4px solid #feca57;
-  animation: pop-up 0.5s ease-out 0.2s backwards;
-}
-@keyframes pop-up {
-  from {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-}
-.celebration-character {
-  font-size: 6rem;
-}
-.celebration-title {
-  font-family: "Bungee", cursive;
-  font-size: clamp(2.5rem, 6vw, 4rem);
-}
-.celebration-message {
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  color: #555;
-}
-.celebration-star {
-  font-size: 2.5rem;
-  animation: star-spin-fade 1s ease-out forwards;
-}
-.celebration-star:nth-child(1) {
-  animation-delay: 0.4s;
-}
-.celebration-star:nth-child(2) {
-  animation-delay: 0.5s;
-}
-.celebration-star:nth-child(3) {
-  animation-delay: 0.6s;
-}
-.celebration-star:nth-child(4) {
-  animation-delay: 0.7s;
-}
-.celebration-star:nth-child(5) {
-  animation-delay: 0.8s;
-}
-@keyframes star-spin-fade {
-  from {
-    transform: scale(0) rotate(0deg);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) rotate(360deg);
-    opacity: 1;
-  }
-}
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  animation: confetti-fall linear infinite;
-}
-@keyframes confetti-fall {
-  0% {
-    transform: translateY(-10vh) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh) rotate(720deg);
-    opacity: 0;
-  }
-}
 .success-message {
-  position: absolute;
+  position: fixed; /* Changed from absolute to fixed */
+  z-index: 1000; /* Ensure it's on top */
   background-color: #fff;
   padding: 10px 20px;
   border-radius: 20px;
   font-weight: bold;
   color: #1dd1a1;
   animation: fly-up-fade 3s forwards;
+  pointer-events: none;
 }
 @keyframes fly-up-fade {
   to {

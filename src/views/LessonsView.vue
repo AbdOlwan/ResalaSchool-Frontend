@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="pa-0 lessons-adventure-page">
-    <!-- Floating Background Elements -->
     <div class="floating-elements">
       <div
         v-for="shape in floatingShapes"
@@ -12,16 +11,14 @@
       </div>
     </div>
 
-    <!-- Hero Section with Learning Mascots -->
     <v-sheet
       class="hero-section d-flex align-center justify-center text-center"
       min-height="500px"
     >
       <v-row justify="center" align="center">
         <v-col cols="12" md="10" lg="8">
-          <!-- Interactive Mascot Friends -->
           <div class="mascots-container mb-6">
-            <div class="main-mascot bounce-animation" @click="playWelcomeSound">
+            <div class="main-mascot bounce-on-hover" @click="playWelcomeSound">
               📚
             </div>
             <div class="mascot-friends">
@@ -44,47 +41,43 @@
                 🏆
               </div>
             </div>
-            <div class="mascot-speech-bubble pulse-animation">
+            <div class="mascot-speech-bubble pulse-on-hover">
               <span class="speech-text">Let's Master These Lessons!</span>
               <div class="bubble-sparkles">✨💫✨</div>
             </div>
           </div>
 
-          <!-- Animated Title -->
-          <h1 class="hero-title rainbow-text mb-4 title-bounce">
+          <h1 class="hero-title static-gradient-text mb-4 title-bounce">
             🌟 Your Learning Adventures Await! 🌟
           </h1>
 
-          <!-- Motivational Subtitle -->
           <p class="hero-subtitle animate-fade-in mb-6">
             🎯 Each lesson is a step closer to becoming a learning champion!
             <br />🚀 Complete lessons to unlock amazing achievements and
             rewards!
           </p>
 
-          <!-- Learning Progress Journey -->
           <div class="journey-progress mb-4">
             <div class="progress-step completed">🏠 Home</div>
-            <div class="progress-arrow bounce-arrow">➜</div>
+            <div class="progress-arrow">➜</div>
             <div class="progress-step completed">📖 Course</div>
-            <div class="progress-arrow bounce-arrow">➜</div>
+            <div class="progress-arrow">➜</div>
             <div class="progress-step completed">📚 Unit</div>
-            <div class="progress-arrow bounce-arrow">➜</div>
+            <div class="progress-arrow">➜</div>
             <div class="progress-step current glow-effect">🎓 Lessons</div>
           </div>
 
-          <!-- Achievement Preview -->
           <div class="achievement-preview mb-4">
             <div class="achievement-item">
               <div class="achievement-icon spin-on-hover">🏆</div>
               <span class="achievement-text">Lesson Champion</span>
             </div>
             <div class="achievement-item">
-              <div class="achievement-icon pulse-animation">⭐</div>
+              <div class="achievement-icon pulse-on-hover">⭐</div>
               <span class="achievement-text">Knowledge Master</span>
             </div>
             <div class="achievement-item">
-              <div class="achievement-icon bounce-animation">🎯</div>
+              <div class="achievement-icon bounce-on-hover">🎯</div>
               <span class="achievement-text">Quick Learner</span>
             </div>
           </div>
@@ -92,9 +85,7 @@
       </v-row>
     </v-sheet>
 
-    <!-- Main Content Container -->
     <v-container class="lessons-container">
-      <!-- Back Button with Fun Design -->
       <v-row justify="start" class="mb-4">
         <v-col cols="12">
           <v-btn
@@ -110,12 +101,11 @@
         </v-col>
       </v-row>
 
-      <!-- Loading State with Fun Characters -->
       <v-row v-if="isLoading" justify="center" class="my-8">
         <v-col cols="12" class="text-center mb-6">
           <div class="loading-mascot">
             <div class="loading-character spin-animation">🎪</div>
-            <h3 class="loading-text rainbow-text">
+            <h3 class="loading-text static-gradient-text">
               Loading Your Amazing Lessons...
             </h3>
             <div class="loading-dots">
@@ -134,12 +124,11 @@
               type="card, article"
               class="skeleton-animated"
             ></v-skeleton-loader>
-            <div class="loading-sparkle pulse-animation">✨</div>
+            <div class="loading-sparkle">✨</div>
           </div>
         </v-col>
       </v-row>
 
-      <!-- Enhanced Lessons Grid -->
       <v-row
         v-if="!isLoading && lessons.length > 0"
         justify="center"
@@ -155,7 +144,7 @@
         >
           <div
             class="lesson-card-wrapper"
-            :style="{ '--animation-delay': `${index * 200}ms` }"
+            :style="{ '--animation-delay': `${index * 150}ms` }"
           >
             <v-hover v-slot="{ isHovering, props }">
               <v-card
@@ -170,28 +159,23 @@
                 @click="viewLesson(lesson.id)"
                 @mouseenter="playHoverSound"
               >
-                <!-- Card Glow Effect -->
                 <div
                   class="card-glow"
                   :class="`glow-${index % cardThemes.length}`"
                 ></div>
 
-                <!-- Floating Elements on Card -->
                 <div class="card-floaters">
                   <div class="floater star rotate-animation">⭐</div>
-                  <div class="floater heart pulse-animation">💖</div>
+                  <div class="floater heart pulse-on-hover">💖</div>
                   <div class="floater magic float-animation">✨</div>
                 </div>
 
-                <!-- Lesson Header Section -->
                 <div class="lesson-header">
-                  <!-- Lesson Number Badge -->
                   <div class="lesson-number-badge">
                     <div class="badge-icon">📖</div>
                     <span class="badge-text">Lesson {{ index + 1 }}</span>
                   </div>
 
-                  <!-- Completion Status -->
                   <div
                     class="completion-status"
                     v-if="isLessonCompleted(lesson)"
@@ -205,13 +189,12 @@
                   </div>
                 </div>
 
-                <!-- Lesson Icon Section -->
                 <div class="lesson-icon-container">
                   <div
                     class="lesson-icon-background"
                     :class="`bg-${index % cardThemes.length}`"
                   >
-                    <div class="lesson-icon bounce-hover">
+                    <div class="lesson-icon bounce-on-hover">
                       {{ getLessonIcon(index) }}
                     </div>
                     <div class="icon-ring"></div>
@@ -221,15 +204,12 @@
                   </div>
                 </div>
 
-                <!-- Card Content -->
                 <div class="card-content">
-                  <!-- Lesson Title -->
                   <v-card-title class="lesson-title text-center">
                     <span class="title-icon">{{ getSubjectIcon(index) }}</span>
                     {{ lesson.title }}
                   </v-card-title>
 
-                  <!-- Progress Section -->
                   <div class="lesson-progress mb-4">
                     <div class="progress-header">
                       <span class="progress-label">🎯 Your Progress</span>
@@ -238,7 +218,7 @@
                       </span>
                     </div>
                     <div class="progress-bar-container">
-                      <div class="progress-bar rainbow-progress">
+                      <div class="progress-bar static-progress-gradient">
                         <div
                           class="progress-fill"
                           :style="{ width: getLessonProgressWidth(lesson) }"
@@ -252,7 +232,6 @@
                     </div>
                   </div>
 
-                  <!-- Lesson Features -->
                   <div class="lesson-features mb-4">
                     <div class="feature-item">
                       <span class="feature-icon">🎮</span>
@@ -268,7 +247,6 @@
                     </div>
                   </div>
 
-                  <!-- Action Button -->
                   <v-card-actions class="justify-center pa-4">
                     <v-btn
                       variant="elevated"
@@ -296,7 +274,6 @@
                   </v-card-actions>
                 </div>
 
-                <!-- Hover Magic Effects -->
                 <div v-if="isHovering" class="hover-effects">
                   <div
                     class="magic-particle"
@@ -306,7 +283,6 @@
                   ></div>
                 </div>
 
-                <!-- Achievement Stars for Completed Lessons -->
                 <div v-if="isLessonCompleted(lesson)" class="achievement-stars">
                   <span class="star filled" v-for="n in 3" :key="n">⭐</span>
                 </div>
@@ -316,21 +292,20 @@
         </v-col>
       </v-row>
 
-      <!-- Motivational Section -->
       <v-row justify="center" class="mt-16 mb-8">
         <v-col cols="12" md="10" lg="8" class="text-center">
           <div class="motivation-section">
             <div class="motivation-characters">
-              <div class="main-character pulse-animation">🌟</div>
+              <div class="main-character pulse-on-hover">🌟</div>
               <div class="supporting-characters">
                 <span class="support-char char-1 float-animation">📚</span>
-                <span class="support-char char-2 bounce-animation">🎯</span>
-                <span class="support-char char-3 rotate-animation">🏆</span>
-                <span class="support-char char-4 pulse-animation">🚀</span>
+                <span class="support-char char-2 bounce-on-hover">🎯</span>
+                <span class="support-char char-3 rotate-on-hover">🏆</span>
+                <span class="support-char char-4 pulse-on-hover">🚀</span>
               </div>
             </div>
 
-            <h3 class="motivation-title rainbow-text">
+            <h3 class="motivation-title static-gradient-text">
               Every Lesson Makes You Smarter!
             </h3>
 
@@ -355,31 +330,6 @@
       </v-row>
     </v-container>
 
-    <!-- Success Celebration Overlay -->
-    <div v-if="showCelebration" class="celebration-overlay">
-      <div class="celebration-content">
-        <div class="celebration-character bounce-in-scale">🎉</div>
-        <h2 class="celebration-title rainbow-text">Amazing Choice!</h2>
-        <p class="celebration-message">
-          🚀 Get ready for an incredible lesson filled with fun activities and
-          exciting discoveries!
-        </p>
-        <div class="celebration-stars">
-          <span class="celebration-star" v-for="n in 5" :key="n">⭐</span>
-        </div>
-      </div>
-      <!-- Confetti Animation -->
-      <div class="confetti-container">
-        <div
-          class="confetti"
-          v-for="n in 100"
-          :key="n"
-          :style="getConfettiStyle(n)"
-        ></div>
-      </div>
-    </div>
-
-    <!-- Floating Success Messages -->
     <div class="success-messages">
       <div
         v-for="message in successMessages"
@@ -410,9 +360,12 @@ const route = useRoute();
 // State Management
 const lessons = ref([]);
 const isLoading = ref(true);
-const showCelebration = ref(false);
 const successMessages = ref([]);
 const floatingShapes = ref([]);
+
+// REFACTOR: Assume a global state for sound settings (e.g., from Pinia/Vuex)
+// This allows the entire app to respect the user's choice.
+const isMuted = ref(false); // Example: replace with `const store = useSettingsStore(); const isMuted = store.isMuted;`
 
 // UI Data
 const cardThemes = [
@@ -465,17 +418,12 @@ const viewLesson = (lessonId) => {
   playClickSound();
   showSuccessMessage("Let's Learn Something Amazing! 🌟");
 
-  // Show celebration
-  showCelebration.value = true;
-
-  // Navigate after celebration
-  setTimeout(() => {
-    showCelebration.value = false;
-    router.push({
-      name: "LessonDetail",
-      params: { ...route.params, lessonId },
-    });
-  }, 3000);
+  // REFACTOR: Removed celebration overlay and artificial setTimeout delay.
+  // Navigation is now instantaneous for a faster, better user experience.
+  router.push({
+    name: "LessonDetail",
+    params: { ...route.params, lessonId },
+  });
 };
 
 // UI Helper Functions
@@ -518,23 +466,6 @@ const getParticleStyle = (index) => {
   };
 };
 
-const getConfettiStyle = (index) => {
-  const colors = [
-    "#FFD700",
-    "#FF6B6B",
-    "#4ECDC4",
-    "#45B7D1",
-    "#96CEB4",
-    "#FFEAA7",
-  ];
-  return {
-    left: Math.random() * 100 + "%",
-    backgroundColor: colors[index % colors.length],
-    animationDelay: Math.random() * 3 + "s",
-    animationDuration: Math.random() * 2 + 3 + "s",
-  };
-};
-
 // Sound Effects
 const playWelcomeSound = () => playSound("welcome");
 const playHoverSound = () => playSound("hover");
@@ -542,6 +473,9 @@ const playClickSound = () => playSound("click");
 const playSuccessSound = () => playSound("success");
 
 const playSound = (type) => {
+  // REFACTOR: Added a check for the global mute state before playing any sound.
+  if (isMuted.value) return;
+
   try {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -629,14 +563,15 @@ const animateLessonCards = () => {
   cards.forEach((card, index) => {
     setTimeout(() => {
       card.classList.add("animate-in");
-    }, index * 200);
+    }, index * 150);
   });
 };
 
 const generateFloatingShapes = () => {
   const emojis = ["⭐", "💖", "🚀", "📚", "🏆", "✨"];
   const shapes = [];
-  for (let i = 0; i < 25; i++) {
+  // REFACTOR: Reduced the number of floating elements from 25 to 8 to decrease visual clutter.
+  for (let i = 0; i < 8; i++) {
     shapes.push({
       id: `shape-${i}`,
       emoji: emojis[i % emojis.length],
@@ -644,8 +579,9 @@ const generateFloatingShapes = () => {
         left: `${Math.random() * 100}vw`,
         top: `${Math.random() * 100}vh`,
         fontSize: `${Math.random() * 1.5 + 0.5}rem`,
-        animationDuration: `${Math.random() * 20 + 15}s`,
-        animationDelay: `${Math.random() * 15}s`,
+        // REFACTOR: Increased animation duration for slower, less distracting movement.
+        animationDuration: `${Math.random() * 25 + 20}s`,
+        animationDelay: `${Math.random() * 20}s`,
       },
     });
   }
@@ -660,7 +596,8 @@ const generateFloatingShapes = () => {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  font-family: "Comic Neue", cursive;
+  /* REFACTOR: Changed primary font to Cairo for better readability. */
+  font-family: "Cairo", sans-serif;
 }
 
 /* Floating Background Elements */
@@ -687,7 +624,7 @@ const generateFloatingShapes = () => {
   }
   10%,
   90% {
-    opacity: 0.7;
+    opacity: 0.5; /* Reduced opacity */
   }
   100% {
     transform: translateY(-20vh) rotate(360deg);
@@ -725,8 +662,17 @@ const generateFloatingShapes = () => {
   transform: scale(1.15);
 }
 
-.bounce-animation {
+/* REFACTOR: Converted distracting continuous animations to interaction-based animations */
+.bounce-on-hover:hover {
   animation: mascot-bounce 2s ease-in-out infinite;
+}
+
+.pulse-on-hover:hover {
+  animation: pulse-anim 1.5s infinite ease-in-out;
+}
+
+.rotate-on-hover:hover {
+  animation: spin-anim 4s linear infinite;
 }
 
 @keyframes mascot-bounce {
@@ -846,32 +792,19 @@ const generateFloatingShapes = () => {
 
 /* Typography */
 .hero-title {
+  /* REFACTOR: Bungee font is now correctly scoped to only H1 titles. */
   font-family: "Bungee", cursive;
   font-size: clamp(2rem, 6vw, 4.5rem);
   text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
   letter-spacing: 2px;
 }
 
-.rainbow-text {
-  background: linear-gradient(
-    90deg,
-    #ff6b6b,
-    #feca57,
-    #48dbfb,
-    #1dd1a1,
-    #ff6b6b
-  );
+/* REFACTOR: Removed animated rainbow text for better readability and performance. */
+.static-gradient-text {
+  background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  animation: rainbow-anim 4s linear infinite;
-}
-
-@keyframes rainbow-anim {
-  to {
-    background-position: 200% center;
-  }
 }
 
 .title-bounce {
@@ -893,7 +826,8 @@ const generateFloatingShapes = () => {
 }
 
 .hero-subtitle {
-  font-family: "Poppins", sans-serif;
+  /* REFACTOR: Changed Poppins to Cairo. */
+  font-family: "Cairo", sans-serif;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
   color: #fff;
   opacity: 0;
@@ -959,20 +893,6 @@ const generateFloatingShapes = () => {
   font-weight: bold;
 }
 
-.bounce-arrow {
-  animation: bounce-arrow-anim 1.5s infinite;
-}
-
-@keyframes bounce-arrow-anim {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-}
-
 /* Achievement Preview */
 .achievement-preview {
   display: flex;
@@ -997,10 +917,6 @@ const generateFloatingShapes = () => {
 
 .spin-on-hover:hover {
   transform: rotate(360deg) scale(1.2);
-}
-
-.pulse-animation {
-  animation: pulse-anim 1.5s infinite ease-in-out;
 }
 
 @keyframes pulse-anim {
@@ -1357,20 +1273,6 @@ const generateFloatingShapes = () => {
   transition: transform 0.3s ease;
 }
 
-.bounce-hover:hover {
-  animation: icon-bounce 0.5s ease;
-}
-
-@keyframes icon-bounce {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-}
-
 .icon-ring {
   position: absolute;
   width: 120%;
@@ -1491,7 +1393,7 @@ const generateFloatingShapes = () => {
   position: relative;
 }
 
-.rainbow-progress .progress-fill {
+.static-progress-gradient .progress-fill {
   background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1);
 }
 
@@ -1715,113 +1617,7 @@ const generateFloatingShapes = () => {
   margin-top: 0.5rem;
 }
 
-/* Success Celebration Overlay */
-.celebration-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(29, 29, 53, 0.85);
-  backdrop-filter: blur(10px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  opacity: 0;
-  animation: fade-in 0.5s forwards;
-}
-
-.celebration-content {
-  text-align: center;
-  color: #fff;
-  padding: 2rem;
-}
-
-.celebration-character {
-  font-size: 8rem;
-}
-
-.bounce-in-scale {
-  animation: bounce-in-scale-anim 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-    forwards;
-}
-
-@keyframes bounce-in-scale-anim {
-  0% {
-    transform: scale(0.2);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.celebration-title {
-  font-family: "Bungee", cursive;
-  font-size: 3rem;
-  margin: 1rem 0;
-}
-.celebration-message {
-  font-size: 1.2rem;
-  max-width: 500px;
-  margin-bottom: 2rem;
-}
-.celebration-stars {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-.celebration-star {
-  font-size: 2rem;
-  opacity: 0;
-  animation: star-appear 0.5s forwards;
-}
-.celebration-star:nth-child(1) {
-  animation-delay: 0.5s;
-}
-.celebration-star:nth-child(2) {
-  animation-delay: 0.6s;
-}
-.celebration-star:nth-child(3) {
-  animation-delay: 0.7s;
-}
-.celebration-star:nth-child(4) {
-  animation-delay: 0.8s;
-}
-.celebration-star:nth-child(5) {
-  animation-delay: 0.9s;
-}
-
-.confetti-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  opacity: 0;
-  animation: fall 5s linear infinite;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-10vh) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh) rotate(720deg);
-    opacity: 0;
-  }
-}
+/* REFACTOR: Removed celebration overlay CSS as the feature was removed for better performance */
 
 /* Floating Success Messages */
 .success-messages {

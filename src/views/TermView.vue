@@ -1,61 +1,35 @@
 <template>
   <v-container fluid class="pa-0 terms-adventure-page">
-    <!-- Floating Background Elements -->
     <div class="floating-elements">
-      <div class="floating-shape star" v-for="n in 15" :key="'star-' + n">
+      <div class="floating-shape star" v-for="n in 8" :key="'star-' + n">
         ⭐
-      </div>
-      <div class="floating-shape rocket" v-for="n in 8" :key="'rocket-' + n">
-        🚀
-      </div>
-      <div class="floating-shape book" v-for="n in 6" :key="'book-' + n">
-        📚
-      </div>
-      <div class="floating-shape trophy" v-for="n in 5" :key="'trophy-' + n">
-        🏆
-      </div>
-      <div class="floating-shape magic" v-for="n in 4" :key="'magic-' + n">
-        ✨
       </div>
     </div>
 
-    <!-- Hero Section with Animated Mascot -->
     <v-sheet
       class="hero-section d-flex align-center justify-center text-center"
-      height="480"
+      height="400"
     >
       <v-row justify="center" align="center">
         <v-col cols="12" md="10" lg="8">
-          <!-- Animated Learning Characters -->
           <div class="characters-container mb-6">
             <div class="character-group">
               <div
-                class="main-character bounce-animation"
+                class="main-character interactive-bounce"
                 @click="playWelcomeSound"
               >
                 🎓
               </div>
-              <div class="sidekick-left float-animation">🌟</div>
-              <div class="sidekick-right pulse-animation">📖</div>
-            </div>
-            <div class="character-speech-bubble">
-              <span class="speech-text">Choose Your Learning Term!</span>
-              <div class="bubble-sparkles">✨🌈✨</div>
             </div>
           </div>
 
-          <!-- Main Title with Dynamic Animation -->
-          <h1 class="hero-title gradient-text mb-4">
-            🌟 Select Your Term Adventure 🌟
-          </h1>
+          <h1 class="hero-title mb-4">Select Your Term Adventure</h1>
 
-          <!-- Engaging Subtitle -->
-          <p class="hero-subtitle animate-fade-in mb-6">
-            🎯 Each term brings new exciting challenges and knowledge!
-            <br />🚀 Choose your term and unlock amazing learning experiences!
+          <p class="hero-subtitle mb-6">
+            Each term brings new exciting challenges and knowledge!
+            <br />Choose your term and unlock amazing learning experiences!
           </p>
 
-          <!-- Learning Journey Progress -->
           <div class="journey-progress mb-4">
             <div class="progress-step completed">🏠 Home</div>
             <div class="progress-arrow">➜</div>
@@ -69,35 +43,26 @@
       </v-row>
     </v-sheet>
 
-    <!-- Main Content Container -->
     <v-container class="terms-container">
-      <!-- Loading State with Fun Animation -->
       <v-row v-if="isLoading" justify="center" class="my-8">
         <v-col cols="12" class="text-center">
           <div class="loading-mascot">
-            <div class="loading-character spin-animation">🎨</div>
-            <h3 class="loading-text gradient-text">Preparing Your Terms...</h3>
-            <div class="loading-dots">
-              <span class="dot" v-for="n in 3" :key="n"></span>
-            </div>
+            <div class="loading-character">🎨</div>
+            <h3 class="loading-text">Preparing Your Terms...</h3>
           </div>
         </v-col>
         <v-col v-for="n in 2" :key="n" cols="12" sm="6">
-          <div class="loading-card">
-            <v-skeleton-loader
-              type="card, article"
-              class="skeleton-animated"
-            ></v-skeleton-loader>
-            <div class="loading-sparkle">✨</div>
-          </div>
+          <v-skeleton-loader
+            type="card, article"
+            class="skeleton-loader"
+          ></v-skeleton-loader>
         </v-col>
       </v-row>
 
-      <!-- Error State with Friendly Character -->
       <v-row v-if="apiError" justify="center" class="my-8">
         <v-col cols="12" md="8">
           <div class="error-container">
-            <div class="error-character shake-animation">😔</div>
+            <div class="error-character">😔</div>
             <div class="error-card">
               <h3 class="error-title">Oops! Something went wrong</h3>
               <p class="error-message">{{ apiError }}</p>
@@ -108,14 +73,13 @@
                 class="retry-btn"
                 prepend-icon="mdi-refresh"
               >
-                Try Again! 🔄
+                Try Again!
               </v-btn>
             </div>
           </div>
         </v-col>
       </v-row>
 
-      <!-- Terms Grid -->
       <v-row
         v-if="!isLoading && !apiError"
         justify="center"
@@ -127,211 +91,97 @@
           :key="term.id"
           cols="12"
           sm="6"
-          md="6"
-          lg="6"
           class="term-col"
         >
           <div
             class="term-card-wrapper"
-            :style="{ '--animation-delay': `${index * 300}ms` }"
+            :style="{ '--animation-delay': `${index * 150}ms` }"
           >
             <v-hover v-slot="{ isHovering, props }">
               <v-card
                 v-bind="props"
-                :elevation="isHovering ? 24 : 12"
+                :elevation="isHovering ? 16 : 8"
                 class="term-card"
-                :class="[
-                  `term-theme-${index % termThemes.length}`,
-                  { 'term-card--hover': isHovering },
-                ]"
+                :class="{ 'term-card--hover': isHovering }"
                 @click="navigateToTerm(term.id, term.name)"
               >
-                <!-- Card Magical Glow Effect -->
-                <div
-                  class="card-magical-glow"
-                  :class="`glow-${index % termThemes.length}`"
-                ></div>
-
-                <!-- Floating Magic Elements on Card -->
-                <div class="card-magic-elements">
-                  <div class="magic-element star1">⭐</div>
-                  <div class="magic-element star2">🌟</div>
-                  <div class="magic-element sparkle">✨</div>
-                  <div class="magic-element gem">💎</div>
-                </div>
-
-                <!-- Card Header with Seasonal Theme -->
                 <div
                   class="term-header"
-                  :class="`header-${index % termThemes.length}`"
+                  :class="`header-theme-${index % termThemes.length}`"
                 >
                   <div class="term-icon-container">
-                    <div class="term-main-icon bounce-hover">
+                    <div class="term-main-icon">
                       {{ getIconForTerm(index) }}
                     </div>
-                    <div class="icon-magical-ring"></div>
-                    <div class="icon-particles">
-                      <span class="particle" v-for="n in 8" :key="n">✨</span>
-                    </div>
                   </div>
-
-                  <!-- Season Badge -->
                   <div class="season-badge">
                     <div class="badge-icon">{{ getSeasonEmoji(index) }}</div>
                     <span class="badge-text">{{ getSeasonName(index) }}</span>
                   </div>
                 </div>
 
-                <!-- Card Content -->
                 <v-card-title class="term-title">
                   {{ term.name }}
                 </v-card-title>
 
                 <v-card-text class="term-description">
                   <div class="description-text">
-                    🎨 Discover amazing subjects and topics!
-                    <br />🎯 Interactive lessons and fun activities await!
+                    Discover amazing subjects and topics! Interactive lessons
+                    and fun activities await!
                   </div>
-
-                  <!-- Term Features -->
                   <div class="features-showcase mt-3">
                     <div class="feature-highlight">
                       <span class="feature-icon">📖</span>
-                      <span class="feature-label">Engaging Lessons</span>
+                      <span class="feature-label">Lessons</span>
                     </div>
                     <div class="feature-highlight">
                       <span class="feature-icon">🎮</span>
-                      <span class="feature-label">Interactive Games</span>
+                      <span class="feature-label">Games</span>
                     </div>
                     <div class="feature-highlight">
                       <span class="feature-icon">🏆</span>
                       <span class="feature-label">Achievements</span>
                     </div>
-                    <div class="feature-highlight">
-                      <span class="feature-icon">🌟</span>
-                      <span class="feature-label">Rewards</span>
-                    </div>
                   </div>
                 </v-card-text>
 
-                <!-- Progress Visualization -->
-                <div class="term-progress-section">
-                  <div class="progress-label">
-                    Ready to explore amazing content!
-                  </div>
-                  <div class="progress-visualization">
-                    <div class="progress-orbs">
-                      <div
-                        class="progress-orb"
-                        v-for="n in 5"
-                        :key="n"
-                        :class="{ active: n <= getProgressOrbs(index) }"
-                      >
-                        <span class="orb-icon">💫</span>
-                      </div>
-                    </div>
-                    <div class="readiness-meter">
-                      <div
-                        class="meter-fill"
-                        :style="{ width: getReadinessLevel(index) }"
-                      >
-                        <div class="meter-sparkle"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Action Button with Magic Effect -->
-                <v-card-actions class="justify-center pa-4">
+                <v-card-actions class="justify-center pa-4 mt-auto">
                   <v-btn
                     variant="elevated"
                     :color="getColorForTerm(index)"
                     class="adventure-btn"
                     size="large"
                     @mouseover="playHoverSound"
-                    @click="addMagicEffect"
                   >
-                    <span class="btn-text">Start Adventure!</span>
+                    <span class="btn-text">Start Adventure</span>
                     <v-icon end class="btn-icon">mdi-rocket-launch</v-icon>
-                    <div class="btn-magic-trail"></div>
                   </v-btn>
                 </v-card-actions>
-
-                <!-- Hover Magic Effects -->
-                <div v-if="isHovering" class="hover-magic-effects">
-                  <div class="magic-particle" v-for="n in 12" :key="n"></div>
-                </div>
               </v-card>
             </v-hover>
           </div>
         </v-col>
       </v-row>
 
-      <!-- Motivation & Encouragement Section -->
       <v-row justify="center" class="mt-12 mb-8">
         <v-col cols="12" md="10" lg="8" class="text-center">
           <div class="motivation-section">
-            <div class="motivation-characters">
-              <div class="main-motivator pulse-animation">🌟</div>
-              <div class="cheerleader-group">
-                <span class="cheerleader cheerleader-1">🎉</span>
-                <span class="cheerleader cheerleader-2">🎊</span>
-                <span class="cheerleader cheerleader-3">🎁</span>
-                <span class="cheerleader cheerleader-4">🎈</span>
-              </div>
-            </div>
-
-            <h3 class="motivation-title gradient-text">
-              You're Going to Shine Bright! ⭐
-            </h3>
-
+            <div class="motivation-character interactive-pulse">🌟</div>
+            <h3 class="motivation-title">You're Going to Shine Bright!</h3>
             <p class="motivation-text">
               Every learning adventure starts with choosing the right path. Pick
-              your term above and embark on an incredible journey filled with
-              knowledge, fun, and amazing discoveries!
+              your term above and embark on an incredible journey!
             </p>
-
-            <div class="encouragement-badges">
-              <div
-                class="encouragement-badge"
-                v-for="(badge, idx) in encouragementBadges"
-                :key="idx"
-                :style="{ '--delay': `${idx * 0.2}s` }"
-              >
-                <div class="badge-emoji">{{ badge.emoji }}</div>
-                <div class="badge-text">{{ badge.text }}</div>
-              </div>
-            </div>
           </div>
         </v-col>
       </v-row>
     </v-container>
 
-    <!-- Success Celebration Overlay -->
     <div v-if="showCelebration" class="celebration-overlay">
       <div class="celebration-content">
-        <div class="celebration-character bounce-in">🎉</div>
-        <h2 class="celebration-title">Amazing Choice!</h2>
-        <p class="celebration-message">
-          Get ready for an incredible learning journey filled with excitement,
-          knowledge, and wonderful discoveries!
-        </p>
-        <div class="celebration-decorations">
-          <span class="decoration" v-for="n in 6" :key="n">🌟</span>
-        </div>
-      </div>
-      <div class="magical-confetti" v-for="n in 60" :key="n"></div>
-    </div>
-
-    <!-- Floating Success Messages -->
-    <div class="success-messages">
-      <div
-        v-for="message in successMessages"
-        :key="message.id"
-        class="success-message"
-        :style="message.style"
-      >
-        {{ message.text }} ✨
+        <div class="celebration-character">🚀</div>
+        <h2 class="celebration-title">Let's Go!</h2>
+        <p class="celebration-message">Getting your next adventure ready...</p>
       </div>
     </div>
   </v-container>
@@ -346,10 +196,15 @@ import apiClient from "@/services/api.js";
 const terms = ref([]);
 const isLoading = ref(true);
 const apiError = ref(null);
-const showCelebration = ref(false);
-const successMessages = ref([]);
+const showCelebration = ref(false); // Used only for loading next page, not for artificial delays
 const router = useRouter();
 const route = useRoute();
+
+// --- Global Mute State (Assumed from Pinia/Vuex) ---
+// In a real app, this would be imported from a store, e.g., `import { useAudioStore } from '@/stores/audio';`
+// const audioStore = useAudioStore();
+// const { isMuted } = storeToRefs(audioStore);
+const isMuted = ref(false); // For demonstration purposes, assuming it's a reactive ref.
 
 // --- Theme Data ---
 const termThemes = [
@@ -358,42 +213,25 @@ const termThemes = [
     icon: "🍂",
     season: "Autumn",
     seasonEmoji: "🍁",
-    headerClass: "autumn-theme",
-    glowColor: "#ff5722",
   },
   {
     color: "light-blue-darken-3",
     icon: "❄️",
     season: "Winter",
     seasonEmoji: "⛄",
-    headerClass: "winter-theme",
-    glowColor: "#0277bd",
   },
   {
     color: "green-darken-2",
     icon: "🌱",
     season: "Spring",
     seasonEmoji: "🌸",
-    headerClass: "spring-theme",
-    glowColor: "#388e3c",
   },
   {
     color: "amber-darken-2",
     icon: "☀️",
     season: "Summer",
     seasonEmoji: "🌞",
-    headerClass: "summer-theme",
-    glowColor: "#ffa000",
   },
-];
-
-const encouragementBadges = [
-  { emoji: "🎨", text: "Creative Explorer" },
-  { emoji: "🚀", text: "Knowledge Seeker" },
-  { emoji: "⭐", text: "Bright Student" },
-  { emoji: "🏆", text: "Learning Champion" },
-  { emoji: "💎", text: "Brilliant Mind" },
-  { emoji: "🌈", text: "Dream Achiever" },
 ];
 
 // --- API Call ---
@@ -410,9 +248,7 @@ const fetchTerms = async () => {
     isLoading.value = true;
     apiError.value = null;
 
-    // Add some loading delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    // Artificial delay removed for faster loading perception.
     const response = await apiClient.get(
       `/api/EducationalContent/grades/${gradeId}/terms`
     );
@@ -441,6 +277,7 @@ const fetchTerms = async () => {
 // --- Lifecycle Hook ---
 onMounted(async () => {
   await fetchTerms();
+  // Animate cards after they are rendered
   await nextTick();
   animateTermCards();
 });
@@ -448,30 +285,24 @@ onMounted(async () => {
 // --- Animation Functions ---
 const animateTermCards = () => {
   const cards = document.querySelectorAll(".term-card-wrapper");
-  cards.forEach((card, index) => {
-    setTimeout(() => {
-      card.classList.add("animate-in");
-    }, index * 300);
+  cards.forEach((card) => {
+    card.classList.add("animate-in");
   });
 };
 
 // --- Navigation ---
-const navigateToTerm = async (termId, termName) => {
+const navigateToTerm = (termId, termName) => {
   playClickSound();
-  showSuccessMessage("Perfect Choice! 🌟");
 
-  // Show celebration
-  showCelebration.value = true;
-
-  // Navigate after celebration
-  setTimeout(() => {
-    showCelebration.value = false;
-    console.log(`Navigating to Term ID: ${termId} (${termName})`);
-    router.push({
-      name: "Courses",
-      params: { gradeId: route.params.gradeId, termId },
-    });
-  }, 2800);
+  // CRITICAL CHANGE: Immediate navigation. No more setTimeout delay.
+  // The 'showCelebration' overlay is removed from this flow because navigation is instant.
+  // It should only be used if there's a data-fetching step on the *next* page
+  // that this overlay can mask. For this component's responsibility, navigation is direct.
+  console.log(`Navigating instantly to Term ID: ${termId} (${termName})`);
+  router.push({
+    name: "Courses",
+    params: { gradeId: route.params.gradeId, termId },
+  });
 };
 
 // --- UI Helper Functions ---
@@ -481,16 +312,6 @@ const getSeasonEmoji = (index) =>
   termThemes[index % termThemes.length].seasonEmoji;
 const getSeasonName = (index) => termThemes[index % termThemes.length].season;
 
-const getProgressOrbs = (index) => {
-  const orbCounts = [4, 5, 3, 4, 5];
-  return orbCounts[index % orbCounts.length];
-};
-
-const getReadinessLevel = (index) => {
-  const levels = ["88%", "95%", "82%", "90%", "96%"];
-  return levels[index % levels.length];
-};
-
 // --- Sound Effects ---
 const playWelcomeSound = () => playSound("welcome");
 const playHoverSound = () => playSound("hover");
@@ -499,6 +320,11 @@ const playSuccessSound = () => playSound("success");
 const playErrorSound = () => playSound("error");
 
 const playSound = (type) => {
+  // NEW LOGIC: Check the global mute state before playing any sound.
+  if (isMuted.value) {
+    return;
+  }
+
   try {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -551,48 +377,23 @@ const playSound = (type) => {
     console.log("Audio not supported");
   }
 };
-
-// --- Interactive Effects ---
-const addMagicEffect = (event) => {
-  const button = event.currentTarget;
-  const magic = document.createElement("div");
-  magic.className = "magic-burst";
-  magic.innerHTML = "✨🌟✨";
-  button.appendChild(magic);
-  setTimeout(() => magic.remove(), 1000);
-};
-
-// --- Success Messages ---
-const showSuccessMessage = (text) => {
-  const message = {
-    id: Date.now(),
-    text,
-    style: {
-      left: Math.random() * 80 + 10 + "%",
-      top: Math.random() * 60 + 20 + "%",
-    },
-  };
-
-  successMessages.value.push(message);
-
-  setTimeout(() => {
-    const index = successMessages.value.findIndex((m) => m.id === message.id);
-    if (index > -1) successMessages.value.splice(index, 1);
-  }, 3000);
-};
 </script>
 
 <style scoped>
+/* --- Font Imports --- */
+@import url("https://fonts.googleapis.com/css2?family=Bungee&family=Cairo:wght@400;600;800&display=swap");
+
 /* --- Base Styles --- */
 .terms-adventure-page {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  font-family: "Comic Neue", cursive;
+  /* FONT CHANGE: Primary font is now Cairo */
+  font-family: "Cairo", sans-serif;
 }
 
-/* --- Floating Background Elements --- */
+/* --- Floating Background Elements (Simplified) --- */
 .floating-elements {
   position: fixed;
   top: 0;
@@ -600,885 +401,183 @@ const showSuccessMessage = (text) => {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 .floating-shape {
   position: absolute;
-  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-  animation: float-magic 25s ease-in-out infinite;
-  opacity: 0.6;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  /* ANIMATION CHANGE: Slower, less obtrusive animation */
+  animation: float-around 40s ease-in-out infinite;
+  opacity: 0.15;
 }
 
-/* Magical floating patterns */
-.floating-shape.star:nth-child(1) {
-  top: 5%;
-  left: 8%;
-  animation-delay: 0s;
-}
-.floating-shape.star:nth-child(2) {
-  top: 15%;
-  right: 12%;
-  animation-delay: -3s;
-}
-.floating-shape.star:nth-child(3) {
-  top: 45%;
-  left: 5%;
-  animation-delay: -6s;
-}
-.floating-shape.rocket:nth-child(1) {
-  top: 25%;
+/* Distribute elements randomly */
+.floating-shape:nth-child(1) {
+  top: 10%;
   left: 15%;
-  animation-delay: -2s;
+  animation-delay: -5s;
 }
-.floating-shape.rocket:nth-child(2) {
-  bottom: 30%;
-  right: 20%;
-  animation-delay: -8s;
-}
-.floating-shape.book:nth-child(1) {
-  top: 60%;
-  right: 8%;
-  animation-delay: -4s;
-}
-.floating-shape.trophy:nth-child(1) {
-  bottom: 15%;
-  left: 25%;
-  animation-delay: -7s;
-}
-.floating-shape.magic:nth-child(1) {
-  bottom: 5%;
-  left: 5%;
+.floating-shape:nth-child(2) {
+  top: 20%;
+  right: 10%;
   animation-delay: -10s;
 }
+.floating-shape:nth-child(3) {
+  top: 75%;
+  left: 20%;
+  animation-delay: -15s;
+}
+.floating-shape:nth-child(4) {
+  bottom: 10%;
+  right: 15%;
+  animation-delay: -20s;
+}
+.floating-shape:nth-child(5) {
+  top: 40%;
+  left: 50%;
+  animation-delay: -25s;
+}
+.floating-shape:nth-child(6) {
+  top: 80%;
+  right: 40%;
+  animation-delay: -30s;
+}
+.floating-shape:nth-child(7) {
+  top: 5%;
+  left: 70%;
+  animation-delay: -35s;
+}
+.floating-shape:nth-child(8) {
+  bottom: 5%;
+  left: 5%;
+  animation-delay: -40s;
+}
 
-@keyframes float-magic {
+@keyframes float-around {
   0%,
   100% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
+    transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translate(20vw, -15vh) rotate(90deg) scale(1.2);
+    transform: translate(15vw, -20vh) rotate(60deg);
   }
   50% {
-    transform: translate(15vw, -25vh) rotate(180deg) scale(0.8);
+    transform: translate(0, 25vh) rotate(120deg);
   }
   75% {
-    transform: translate(-15vw, -20vh) rotate(270deg) scale(1.1);
+    transform: translate(-15vw, -10vh) rotate(180deg);
   }
 }
 
 /* --- Hero Section --- */
 .hero-section {
   position: relative;
+  z-index: 1;
   background: linear-gradient(
     135deg,
-    rgba(102, 126, 234, 0.95) 0%,
-    rgba(118, 75, 162, 0.95) 50%,
-    rgba(240, 147, 251, 0.95) 100%
+    rgba(102, 126, 234, 0.9) 0%,
+    rgba(118, 75, 162, 0.9) 100%
   );
-  overflow: hidden;
 }
 
-.hero-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
-    repeat;
-}
-
-/* --- Characters Section --- */
-.characters-container {
-  position: relative;
-  z-index: 2;
-}
-
-.character-group {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 1.5rem;
-}
-
+/* Mascot Character - Interaction based animation */
 .main-character {
-  font-size: 6rem;
+  font-size: 5rem;
   cursor: pointer;
   display: inline-block;
-  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.3));
-  transition: transform 0.3s ease;
-  position: relative;
-  z-index: 3;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.main-character:hover {
-  transform: scale(1.15);
-}
-
-.sidekick-left,
-.sidekick-right {
-  position: absolute;
-  font-size: 3rem;
-  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.2));
-}
-
-.sidekick-left {
-  top: 20%;
-  left: -60px;
-  animation-delay: -1s;
-}
-
-.sidekick-right {
-  top: 20%;
-  right: -60px;
-  animation-delay: -2s;
-}
-
-.bounce-animation {
-  animation: character-bounce 3s ease-in-out infinite;
-}
-
-.float-animation {
-  animation: character-float 4s ease-in-out infinite;
-}
-
-.pulse-animation {
-  animation: character-pulse 2s ease-in-out infinite;
+.interactive-bounce:hover {
+  animation: character-bounce 0.8s ease;
 }
 
 @keyframes character-bounce {
   0%,
-  20%,
-  50%,
-  80%,
   100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-25px);
-  }
-  60% {
-    transform: translateY(-12px);
-  }
-}
-
-@keyframes character-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-5deg);
+    transform: translateY(0) scale(1);
   }
   50% {
-    transform: translateY(-15px) rotate(5deg);
-  }
-}
-
-@keyframes character-pulse {
-  0%,
-  100% {
-    transform: scale(1) rotate(0deg);
-  }
-  50% {
-    transform: scale(1.1) rotate(10deg);
-  }
-}
-
-.character-speech-bubble {
-  position: absolute;
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.98);
-  padding: 15px 25px;
-  border-radius: 30px;
-  border: 4px solid #ffd700;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: bubble-dance 4s ease-in-out infinite;
-  min-width: 220px;
-  text-align: center;
-}
-
-.character-speech-bubble::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 15px solid transparent;
-  border-top-color: #ffd700;
-}
-
-.bubble-sparkles {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  animation: sparkle-dance 2s linear infinite;
-}
-
-@keyframes bubble-dance {
-  0%,
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
-  50% {
-    opacity: 0.95;
-    transform: translateX(-50%) translateY(-10px) scale(1.02);
-  }
-}
-
-@keyframes sparkle-dance {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(360deg) scale(1.2);
+    transform: translateY(-15px) scale(1.1);
   }
 }
 
 /* --- Typography --- */
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
-  font-weight: 800;
-  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+  /* FONT CHANGE: Bungee for H1 titles only */
+  font-family: "Bungee", cursive;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 400; /* Bungee is bold by default */
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.15);
   line-height: 1.2;
-  position: relative;
-  z-index: 2;
-}
-
-.gradient-text {
-  background: linear-gradient(
-    45deg,
-    #ffd700,
-    #ff6b6b,
-    #4ecdc4,
-    #45b7d1,
-    #ff9ff3
-  );
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-magic 5s ease-in-out infinite;
-}
-
-@keyframes gradient-magic {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  25% {
-    background-position: 100% 50%;
-  }
-  50% {
-    background-position: 50% 100%;
-  }
-  75% {
-    background-position: 50% 0%;
-  }
+  color: #ffffff;
+  /* RAINBOW TEXT REMOVED: Replaced with a solid, high-contrast color */
 }
 
 .hero-subtitle {
-  font-size: clamp(1.2rem, 2.5vw, 1.9rem);
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 600;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
   line-height: 1.5;
-  z-index: 2;
-  position: relative;
-}
-
-.animate-fade-in {
-  animation: magical-fade-in 1.2s ease-out 0.5s both;
-}
-
-@keyframes magical-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 /* --- Learning Journey Progress --- */
 .journey-progress {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(5px);
-  padding: 12px 24px;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 10px 20px;
   border-radius: 50px;
-  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.2),
-    0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .progress-step {
-  font-weight: bold;
-  color: #fff;
-  font-size: 1rem;
-  transition: color 0.3s ease;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
 }
 
 .progress-step.completed {
-  color: #c8e6c9;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
 }
 
 .progress-step.current {
   color: #ffd700;
-  text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
-  animation: pulse-glow 2s infinite;
+  text-shadow: 0 0 8px #ffd700;
 }
 
 .progress-arrow {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1.2rem;
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
-  }
-  50% {
-    text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-  }
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* --- Main Content Container --- */
 .terms-container {
   position: relative;
-  z-index: 5;
-  margin-top: -60px;
-  padding-bottom: 80px;
+  z-index: 2;
+  margin-top: -50px;
+  padding-bottom: 60px;
 }
 
-/* --- Loading State --- */
-.loading-mascot {
-  padding: 40px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-}
-
-.loading-character {
-  font-size: 5rem;
-  animation: spin-animation 3s linear infinite;
-}
-
-.loading-text {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.loading-dots {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  background-color: #fff;
-  border-radius: 50%;
-  margin: 0 5px;
-  animation: dot-flicker 1.5s infinite;
-}
-
-.dot:nth-child(1) {
-  animation-delay: 0s;
-}
-.dot:nth-child(2) {
-  animation-delay: 0.5s;
-}
-.dot:nth-child(3) {
-  animation-delay: 1s;
-}
-
-@keyframes dot-flicker {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-.loading-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.loading-sparkle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: 4rem;
-  transform: translate(-50%, -50%);
-  animation: spin-animation 4s linear infinite;
-  opacity: 0.2;
-}
-
-.v-skeleton-loader {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-}
-
-.v-skeleton-loader .v-skeleton-loader__bone {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-/* --- Error State --- */
+/* --- Loading & Error States --- */
+.loading-mascot,
 .error-container {
-  text-align: center;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  padding: 30px;
   border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  color: #fff;
 }
 
+.loading-character,
 .error-character {
-  font-size: 5rem;
-  animation: shake-animation 0.5s ease-in-out infinite;
-  transform-origin: bottom center;
-}
-
-@keyframes shake-animation {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-10deg);
-  }
-  50% {
-    transform: rotate(0deg);
-  }
-  75% {
-    transform: rotate(10deg);
-  }
-}
-
-.error-card {
-  margin-top: 20px;
-}
-
-.error-title {
-  font-size: 2rem;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.error-message {
-  font-size: 1.1rem;
-  color: #fce4ec;
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.retry-btn {
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-/* --- Terms Grid & Cards --- */
-.terms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
-}
-
-.term-col {
-  display: flex;
-}
-
-.term-card-wrapper {
-  width: 100%;
-  opacity: 0;
-  transform: translateY(50px) scale(0.8);
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-    opacity 0.8s ease-in-out;
-}
-
-.term-card-wrapper.animate-in {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.term-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 24px !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3) !important;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  cursor: pointer;
-  z-index: 10;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.term-card--hover {
-  transform: translateY(-10px) scale(1.03) rotate(-2deg);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 30px var(--hover-color, #ffd700) !important;
-}
-
-.card-magical-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  border-radius: 24px;
-  background: var(--glow-color, #ffd700);
-  filter: blur(30px);
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.term-card:not(.term-card--hover) .card-magical-glow {
-  opacity: 0;
-}
-
-/* Card Magic Elements */
-.card-magic-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
-}
-
-.term-card--hover .card-magic-elements {
-  opacity: 1;
-}
-
-.magic-element {
-  position: absolute;
-  font-size: 2rem;
-  animation: card-float 5s linear infinite;
-}
-
-.magic-element.star1 {
-  top: 10%;
-  left: 15%;
-  animation-delay: -1s;
-}
-.magic-element.star2 {
-  top: 30%;
-  right: 10%;
-  animation-delay: -2s;
-}
-.magic-element.sparkle {
-  bottom: 20%;
-  left: 25%;
-  animation-delay: -3s;
-}
-.magic-element.gem {
-  bottom: 15%;
-  right: 20%;
-  animation-delay: -4s;
-}
-
-@keyframes card-float {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(5px, 10px) rotate(15deg);
-  }
-}
-
-/* Card Header & Themes */
-.term-header {
-  position: relative;
-  height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  overflow: hidden;
-}
-
-.term-theme-0 .term-header {
-  background: linear-gradient(135deg, #ff8a65, #ff5722);
-}
-.term-theme-1 .term-header {
-  background: linear-gradient(135deg, #4fc3f7, #0277bd);
-}
-.term-theme-2 .term-header {
-  background: linear-gradient(135deg, #81c784, #388e3c);
-}
-.term-theme-3 .term-header {
-  background: linear-gradient(135deg, #ffca28, #ffa000);
-}
-
-.glow-0 {
-  --glow-color: #ff5722;
-}
-.glow-1 {
-  --glow-color: #0277bd;
-}
-.glow-2 {
-  --glow-color: #388e3c;
-}
-.glow-3 {
-  --glow-color: #ffa000;
-}
-
-.term-icon-container {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.term-main-icon {
   font-size: 4rem;
-  transition: transform 0.3s ease;
-  z-index: 2;
+  animation: spin-subtle 4s linear infinite;
 }
 
-.bounce-hover:hover {
-  animation: icon-bounce 0.8s ease-in-out infinite;
-}
-
-@keyframes icon-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.icon-magical-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 4px solid rgba(255, 255, 255, 0.4);
-  transform: translate(-50%, -50%) scale(0);
-  animation: ring-pulse 2s infinite;
-  z-index: 1;
-}
-
-@keyframes ring-pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 0;
-  }
-}
-
-.icon-particles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.particle {
-  position: absolute;
-  font-size: 1rem;
-  animation: particle-fly 3s linear infinite;
-}
-
-.particle:nth-child(1) {
-  top: -20px;
-  left: -20px;
-  animation-delay: 0s;
-}
-.particle:nth-child(2) {
-  top: -30px;
-  left: 10px;
-  animation-delay: -0.5s;
-}
-.particle:nth-child(3) {
-  top: -10px;
-  right: -30px;
-  animation-delay: -1s;
-}
-.particle:nth-child(4) {
-  top: 20px;
-  right: -20px;
-  animation-delay: -1.5s;
-}
-
-@keyframes particle-fly {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--x, 50px), var(--y, 50px)) scale(0.5);
-    opacity: 0;
-  }
-}
-
-.season-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.badge-icon {
-  font-size: 1.2rem;
-}
-
-/* Card Content */
-.term-title {
-  text-align: center;
-  font-weight: 800;
-  font-size: 1.8rem !important;
-  color: #fff;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-  padding-top: 20px !important;
-  line-height: 1.2;
-}
-
-.term-description {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  padding: 16px;
-  font-size: 1rem;
-}
-
-.description-text {
-  margin-bottom: 12px;
-}
-
-.features-showcase {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-}
-
-.feature-highlight {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.feature-icon {
-  font-size: 1rem;
-}
-
-/* Progress Visualization */
-.term-progress-section {
-  padding: 16px;
-  text-align: center;
-}
-
-.progress-label {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.progress-visualization {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.progress-orbs {
-  display: flex;
-  gap: 6px;
-}
-
-.progress-orb {
-  width: 20px;
-  height: 20px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.5s ease;
-}
-
-.progress-orb.active {
-  background-color: #ffd700;
-  animation: orb-glow 1s infinite alternate;
-}
-
-.progress-orb.active .orb-icon {
-  animation: orb-spin 2s linear infinite;
-}
-
-@keyframes orb-glow {
-  from {
-    box-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700;
-  }
-  to {
-    box-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
-  }
-}
-
-@keyframes orb-spin {
+@keyframes spin-subtle {
   from {
     transform: rotate(0deg);
   }
@@ -1487,269 +586,228 @@ const showSuccessMessage = (text) => {
   }
 }
 
-.orb-icon {
-  font-size: 0.8rem;
-  opacity: 0.8;
+.loading-text,
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 10px;
 }
 
-.readiness-meter {
-  width: 80%;
-  height: 12px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
+.error-message {
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.skeleton-loader {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* --- Terms Grid & Cards --- */
+.term-card-wrapper {
+  width: 100%;
+  opacity: 0;
+  transform: translateY(40px);
+  /* Simplified animation */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition-delay: var(--animation-delay, 0ms);
+}
+
+.term-card-wrapper.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.term-card {
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.term-card--hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Card Header Themes */
+.term-header {
+  position: relative;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   overflow: hidden;
-  position: relative;
 }
 
-.meter-fill {
-  height: 100%;
-  background-color: #ff9ff3;
-  transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
-  position: relative;
+.header-theme-0 {
+  background: linear-gradient(135deg, #ff8a65, #ff5722);
+}
+.header-theme-1 {
+  background: linear-gradient(135deg, #4fc3f7, #0277bd);
+}
+.header-theme-2 {
+  background: linear-gradient(135deg, #81c784, #388e3c);
+}
+.header-theme-3 {
+  background: linear-gradient(135deg, #ffca28, #ffa000);
 }
 
-.meter-sparkle {
+.term-main-icon {
+  font-size: 3.5rem;
+  transition: transform 0.3s ease;
+}
+
+.term-card--hover .term-main-icon {
+  transform: scale(1.1);
+}
+
+.season-badge {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 20px;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.8),
-    transparent
-  );
-  animation: sparkle-shine 2s infinite;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 
-@keyframes sparkle-shine {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
-  }
+/* Card Content */
+.term-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.6rem !important;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  padding: 20px 16px 8px !important;
+  line-height: 1.3;
+}
+
+.term-description {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0 16px 16px !important;
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+.features-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.feature-highlight {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
 }
 
 /* Action Button */
 .adventure-btn {
-  font-weight: bold !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1.5px !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
   font-size: 1rem !important;
   border-radius: 50px !important;
-  position: relative;
-  overflow: hidden;
-  padding: 0 30px !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .adventure-btn:hover {
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-}
-
-.btn-text {
-  position: relative;
-  z-index: 2;
+  transform: scale(1.05);
 }
 
 .btn-icon {
-  z-index: 2;
   transition: transform 0.3s ease;
 }
 
 .adventure-btn:hover .btn-icon {
-  transform: translateX(5px);
-}
-
-.btn-magic-trail {
-  position: absolute;
-  width: 10px;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  filter: blur(5px);
-  animation: magic-trail-anim 1s ease-out;
-  left: -20px;
-  transform: scaleY(0);
-}
-
-@keyframes magic-trail-anim {
-  0% {
-    transform: scaleY(0);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-  100% {
-    transform: scaleY(0);
-  }
-}
-
-/* Hover Magic Effects */
-.hover-magic-effects {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.magic-particle {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: radial-gradient(circle, #fff, transparent);
-  border-radius: 50%;
-  animation: sparkle-float 1s ease-out forwards;
-}
-
-@keyframes sparkle-float {
-  from {
-    transform: translate(var(--x), var(--y));
-    opacity: 1;
-    filter: blur(0);
-  }
-  to {
-    transform: translate(var(--x-end), var(--y-end));
-    opacity: 0;
-    filter: blur(5px);
-  }
+  transform: rotate(-15deg) translateX(3px);
 }
 
 /* --- Motivation Section --- */
 .motivation-section {
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  position: relative;
+  color: #fff;
 }
 
-.motivation-characters {
-  position: absolute;
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
+.motivation-character {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
 }
 
-.main-motivator {
-  font-size: 4rem;
-  animation: pulse-animation 2s infinite;
+.interactive-pulse:hover {
+  animation: pulse-subtle 1.5s ease-in-out infinite;
 }
 
-.cheerleader-group {
-  display: flex;
-  gap: 5px;
-  margin-left: 10px;
-}
-
-.cheerleader {
-  font-size: 2rem;
-  animation: cheerleader-jump 1s ease-in-out infinite;
-  transform-origin: bottom;
-}
-
-.cheerleader-1 {
-  animation-delay: 0s;
-}
-.cheerleader-2 {
-  animation-delay: 0.2s;
-}
-.cheerleader-3 {
-  animation-delay: 0.4s;
-}
-.cheerleader-4 {
-  animation-delay: 0.6s;
-}
-
-@keyframes cheerleader-jump {
+@keyframes pulse-subtle {
   0%,
   100% {
-    transform: translateY(0);
+    transform: scale(1);
   }
   50% {
-    transform: translateY(-10px) scale(1.1);
+    transform: scale(1.15);
   }
 }
 
 .motivation-title {
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  /* RAINBOW TEXT REMOVED: Replaced with static gradient */
+  background: linear-gradient(45deg, #ffd700, #ffc107);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 800;
-  margin-top: 20px;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .motivation-text {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: 15px;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 10px;
   line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.encouragement-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.encouragement-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1);
-  transform: translateY(20px) scale(0.8);
-  opacity: 0;
-  animation: badge-pop-in 0.6s ease-out forwards;
-}
-
-@keyframes badge-pop-in {
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-.badge-emoji {
-  font-size: 2.5rem;
-}
-
-.badge-text {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #fff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* --- Success Celebration Overlay --- */
+/* --- Celebration Overlay (Simplified) --- */
 .celebration-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(118, 75, 162, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba(90, 48, 127, 0.9);
+  backdrop-filter: blur(8px);
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   color: #fff;
-  animation: overlay-fade-in 0.5s ease-out;
+  animation: overlay-fade-in 0.3s ease-out;
 }
 
 @keyframes overlay-fade-in {
@@ -1763,12 +821,12 @@ const showSuccessMessage = (text) => {
 
 .celebration-content {
   text-align: center;
-  animation: content-scale-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: content-scale-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes content-scale-in {
   from {
-    transform: scale(0.5);
+    transform: scale(0.7);
     opacity: 0;
   }
   to {
@@ -1778,148 +836,32 @@ const showSuccessMessage = (text) => {
 }
 
 .celebration-character {
-  font-size: 8rem;
-  animation: bounce-in 1s cubic-bezier(0.2, 0.8, 0.4, 1.2) both;
+  font-size: 6rem;
+  animation: rocket-launch 1.5s ease-in-out infinite;
+}
+
+@keyframes rocket-launch {
+  0% {
+    transform: translateY(10px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(10px);
+  }
 }
 
 .celebration-title {
-  font-size: 3.5rem;
-  font-weight: bold;
-  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+  font-family: "Bungee", cursive;
+  font-size: 2.5rem;
+  font-weight: 400;
   margin-top: 20px;
 }
 
 .celebration-message {
-  font-size: 1.5rem;
-  margin-top: 10px;
-  max-width: 600px;
-  line-height: 1.5;
-}
-
-.celebration-decorations {
-  margin-top: 20px;
-}
-
-.decoration {
-  font-size: 2rem;
-  margin: 0 10px;
-  animation: spin-and-fade 2s ease-out infinite;
-}
-
-.magical-confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #ffcc00;
-  border-radius: 50%;
-  top: 0;
-  animation: confetti-fall 3s ease-in forwards;
-  opacity: 0.8;
-}
-
-.magical-confetti:nth-child(2n) {
-  background: #ff6b6b;
-  width: 8px;
-  height: 8px;
-  border-radius: 0;
-}
-.magical-confetti:nth-child(3n) {
-  background: #4ecdc4;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.magical-confetti:nth-child(4n) {
-  background: #ff9ff3;
-  width: 10px;
-  height: 5px;
-  transform: rotate(45deg);
-}
-
-@keyframes confetti-fall {
-  0% {
-    transform: translate(var(--x), -20vh) rotate(var(--deg));
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--x-end), 120vh) rotate(var(--deg-end));
-    opacity: 0;
-  }
-}
-
-/* --- Floating Success Messages --- */
-.success-messages {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 99;
-}
-
-.success-message {
-  position: absolute;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-  animation: message-float 3s ease-out forwards;
-}
-
-@keyframes message-float {
-  0% {
-    transform: translateY(0) scale(0.5);
-    opacity: 0;
-  }
-  20% {
-    transform: translateY(-20px) scale(1);
-    opacity: 1;
-  }
-  80% {
-    transform: translateY(-80px) scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) scale(1.2);
-    opacity: 0;
-  }
-}
-
-/* --- Responsive Design --- */
-@media (max-width: 600px) {
-  .hero-section {
-    height: auto;
-    padding: 80px 20px;
-  }
-
-  .character-speech-bubble {
-    top: -20px;
-  }
-
-  .journey-progress {
-    gap: 10px;
-    padding: 8px 16px;
-  }
-
-  .progress-step {
-    font-size: 0.9rem;
-  }
-
-  .terms-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .motivation-section {
-    padding: 30px 15px;
-  }
-
-  .motivation-characters {
-    top: -20px;
-  }
-
-  .main-motivator {
-    font-size: 3rem;
-  }
+  font-size: 1.2rem;
+  margin-top: 5px;
+  opacity: 0.9;
 }
 </style>

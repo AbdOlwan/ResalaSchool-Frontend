@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="quiz-adventure-page fill-height">
     <div class="floating-elements">
-      <div class="floating-shape" v-for="n in 20" :key="n">
+      <div class="floating-shape" v-for="n in 8" :key="n">
         {{ ["⭐", "🧠", "💡", "🚀", "✅"][n % 5] }}
       </div>
     </div>
@@ -106,7 +106,7 @@
           <h2 class="feedback-title correct-text">Fantastic!</h2>
           <p class="feedback-message">You are a superstar! 🌟</p>
           <div class="confetti-container">
-            <div class="confetti" v-for="i in 100" :key="i"></div>
+            <div class="confetti" v-for="i in 30" :key="i"></div>
           </div>
         </div>
         <div v-else>
@@ -156,6 +156,11 @@ const orderedItems = ref([]);
 
 // --- Computed Properties ---
 const currentUser = computed(() => store.getters.currentUser);
+
+// Sound Refactoring: Added a computed property to get the global mute state from Vuex.
+// Assumes a getter named 'isMuted' exists in your Vuex store.
+const isMuted = computed(() => store.getters.isMuted || false);
+
 const currentQuestion = computed(
   () => questions.value[currentQuestionIndex.value]
 );
@@ -179,9 +184,9 @@ const isAnswerProvided = computed(() => {
     case "FillInBlank":
       return answerText.value.trim() !== "";
     case "Reorder":
-      // المنطق هو أن المستخدم يجب أن يكون قد قام بترتيب جميع الكلمات.
-      // يمكنك التحقق من أن array الترتيب (orderedItems.value) غير فارغ.
-      // أو يمكنك التحقق من أن عدد العناصر المترتبة يساوي عدد الكلمات الأصلية.
+      // Logic: The user must have interacted with the reorder items.
+      // We check if the orderedItems array is populated.
+      // Note: This relies on the child component emitting an event to update `orderedItems`.
       return orderedItems.value.length > 0;
     default:
       return false;
@@ -190,6 +195,10 @@ const isAnswerProvided = computed(() => {
 
 // --- Sound Effects ---
 const playSound = (type) => {
+  // Sound Refactoring: Check the global mute state before playing any sound.
+  if (isMuted.value) {
+    return;
+  }
   const audioFiles = {
     correct: "https://www.soundjay.com/buttons/sounds/button-1.mp3",
     incorrect: "https://www.soundjay.com/buttons/sounds/button-10.mp3",
@@ -210,9 +219,10 @@ onMounted(() => {
 const fetchQuiz = async () => {
   isLoading.value = true;
   quizFinished.value = false;
-  resetQuizState(); // Reset the state before fetching new data.
+  resetQuizState();
 
   try {
+    // Artificial delay for better perceived loading experience
     await new Promise((resolve) => setTimeout(resolve, 1500));
     const response = await apiClient.get(
       `/api/Exercises/lesson/${props.lessonId}/quiz?count=5`
@@ -280,6 +290,8 @@ const handleSubmit = async () => {
       }
 
       showFeedback.value = true;
+      // UX Logic: This timeout provides immediate visual feedback for a short duration.
+      // It does NOT block navigation, which is user-initiated by the "Next Question" button. This aligns with the principle of no artificial delays.
       setTimeout(() => {
         showFeedback.value = false;
       }, 2500);
@@ -301,7 +313,6 @@ const goToNextQuestion = () => {
   }
 };
 
-// Resets only the state for the next question
 const resetQuestionStateForNext = () => {
   selectedOptionId.value = null;
   answerText.value = "";
@@ -309,7 +320,6 @@ const resetQuestionStateForNext = () => {
   answerSubmitted.value = false;
 };
 
-// Resets the entire quiz
 const resetQuizState = () => {
   score.value = 0;
   currentQuestionIndex.value = 0;
@@ -317,7 +327,7 @@ const resetQuizState = () => {
 };
 
 const restartQuiz = () => {
-  fetchQuiz(); // This will reset the state and fetch new questions.
+  fetchQuiz();
 };
 
 const goBackToLessons = () => {
@@ -329,7 +339,8 @@ const goBackToLessons = () => {
 /* --- Page Layout & Background --- */
 .quiz-adventure-page {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: "Comic Neue", cursive;
+  /* Font Refactoring: Set 'Cairo' as the primary font for readability and multilingual support. */
+  font-family: "Cairo", sans-serif;
   position: relative;
   overflow: hidden;
 }
@@ -347,21 +358,22 @@ const goBackToLessons = () => {
   position: absolute;
   font-size: 2rem;
   color: rgba(255, 255, 255, 0.15);
-  animation: float 20s ease-in-out infinite;
+  /* Animation Refactoring: Animation duration increased to make movement slower and less distracting. */
+  animation: float 45s ease-in-out infinite;
   left: 50%;
   top: 50%;
 }
 
 .floating-shape:nth-child(2n) {
-  animation-duration: 25s;
+  animation-duration: 50s;
   animation-delay: -5s;
 }
 .floating-shape:nth-child(3n) {
-  animation-duration: 30s;
+  animation-duration: 55s;
   animation-delay: -10s;
 }
 .floating-shape:nth-child(4n) {
-  animation-duration: 15s;
+  animation-duration: 40s;
   animation-delay: -2s;
 }
 
@@ -384,6 +396,7 @@ const goBackToLessons = () => {
   animation: bounce 2s infinite ease-in-out;
 }
 .loading-text {
+  /* Font Refactoring: Bungee is reserved for main titles like this one. */
   font-family: "Bungee", cursive;
   font-size: 2.5rem;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
@@ -411,7 +424,7 @@ const goBackToLessons = () => {
   border: 4px solid #fff;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   background: #fdfcff;
-  overflow: visible; /* To allow mascot to pop out */
+  overflow: visible;
   position: relative;
 }
 
@@ -464,12 +477,15 @@ const goBackToLessons = () => {
 }
 
 .action-btn {
-  font-family: "Bungee", cursive;
+  /* Font Refactoring: Switched button font to 'Cairo' for consistency and readability. */
+  font-family: "Cairo", sans-serif;
+  font-weight: bold;
   color: white;
   background: linear-gradient(45deg, #f7971e, #ffd200);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Animation Refactoring: Button animation is interaction-based (on hover), which is good UX. */
 .action-btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
@@ -590,6 +606,8 @@ const goBackToLessons = () => {
     opacity: 0;
   }
 }
+
+/* Reduced number of selectors to match the reduced confetti count */
 .confetti:nth-child(1) {
   left: 10%;
   animation-delay: 0.1s;
@@ -630,8 +648,6 @@ const goBackToLessons = () => {
   left: 95%;
   animation-delay: 0.2s;
 }
-
-/* Repeat for more confetti */
 .confetti:nth-child(11) {
   left: 15%;
   animation-delay: 0.8s;

@@ -51,17 +51,31 @@ watch(
   }
 );
 
+/**
+ * REFACTORED: This function now implements the new feedback logic.
+ * When a user is incorrect, it highlights their wrong answer (red),
+ * highlights the correct answer (green), and fades out all other
+ * incorrect options to improve focus.
+ */
 const getOptionClass = (optionId) => {
+  // Before submission, only apply the 'selected' class
   if (!props.submitted) {
     return selectedOption.value === optionId ? "selected" : "";
   }
 
-  const isCorrect = props.result?.correctOptionId === optionId;
-  const isSelected = selectedOption.value === optionId;
+  const isCorrectOption = props.result?.correctOptionId === optionId;
+  const isSelectedOption = selectedOption.value === optionId;
 
-  if (isCorrect) return "correct";
-  if (isSelected && !props.result?.isCorrect) return "incorrect";
-  return "disabled";
+  // Case 1: The user's answer was CORRECT
+  if (props.result?.isCorrect) {
+    return isCorrectOption ? "correct" : "disabled";
+  }
+  // Case 2: The user's answer was INCORRECT
+  else {
+    if (isCorrectOption) return "correct"; // Highlight the correct answer
+    if (isSelectedOption) return "incorrect"; // Highlight the user's wrong choice
+    return "faded"; // Fade out all other incorrect options
+  }
 };
 
 const getIcon = (optionId) => {
@@ -119,8 +133,9 @@ const getIcon = (optionId) => {
 }
 
 .option-letter {
-  background-color: #764ba2;
-  color: white;
+  /* CHANGED: Darkened background for better contrast and readability */
+  background-color: #673ab7;
+  color: #ffffff;
   border-radius: 8px;
   width: 35px;
   height: 35px;
@@ -152,7 +167,7 @@ const getIcon = (optionId) => {
   background-color: #f3e5f5;
 }
 .option-card.selected .option-letter {
-  background-color: #673ab7;
+  background-color: #512da8; /* Slightly darken on select */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
 }
@@ -184,6 +199,13 @@ const getIcon = (optionId) => {
 .option-card.disabled:hover {
   transform: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* NEW: Added a 'faded' state for non-selected incorrect answers */
+.option-card.faded {
+  opacity: 0.4;
+  pointer-events: none;
+  background-color: #fafafa;
 }
 
 @keyframes bounce-in {

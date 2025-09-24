@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="profile-adventure-page pa-0">
-    <!-- Floating Background Elements -->
     <div class="floating-elements">
       <div
         v-for="shape in floatingShapes"
@@ -12,25 +11,20 @@
       </div>
     </div>
 
-    <!-- Hero Section with Character -->
     <v-sheet
       class="hero-section d-flex align-center justify-center text-center"
       min-height="400px"
     >
       <v-row justify="center" align="center">
         <v-col cols="12">
-          <!-- Interactive Mascot -->
           <div class="mascot-container mb-6">
-            <div class="main-mascot bounce-animation" @click="playWelcomeSound">
-              🎓
-            </div>
+            <div class="main-mascot" @click="playWelcomeSound">🎓</div>
             <div class="mascot-speech-bubble pulse-animation">
               <span class="speech-text">Look at your amazing progress!</span>
               <div class="bubble-sparkles">✨💫✨</div>
             </div>
           </div>
 
-          <!-- Animated Title -->
           <h1 class="hero-title rainbow-text mb-4 title-bounce">
             🌟 Your Learning Profile! 🌟
           </h1>
@@ -43,7 +37,6 @@
       </v-row>
     </v-sheet>
 
-    <!-- Loading State -->
     <div v-if="isLoading" class="loading-container text-center">
       <div class="loading-character spin-animation">🎪</div>
       <h2 class="loading-text rainbow-text">Loading Your Amazing Profile...</h2>
@@ -55,7 +48,6 @@
       </div>
     </div>
 
-    <!-- Error State -->
     <v-row
       v-else-if="apiError"
       justify="center"
@@ -87,19 +79,15 @@
       </v-col>
     </v-row>
 
-    <!-- Main Content -->
     <v-container v-else-if="userProfile" class="main-content">
       <v-row class="profile-content-fade-in">
-        <!-- Left Column - Profile Card -->
         <v-col cols="12" lg="4">
-          <!-- User Profile Card -->
           <v-card
             class="profile-card magic-card text-center pa-6"
             elevation="16"
           >
             <div class="card-glow glow-profile"></div>
 
-            <!-- Avatar Section -->
             <div class="avatar-container">
               <div class="avatar-ring pulse-ring"></div>
               <v-avatar
@@ -120,7 +108,6 @@
               </div>
             </div>
 
-            <!-- User Info -->
             <v-card-title class="user-name mt-4">
               {{ userProfile.fullName }}
             </v-card-title>
@@ -128,7 +115,6 @@
               {{ userProfile.email }}
             </v-card-subtitle>
 
-            <!-- Points Display -->
             <div class="points-section mb-4">
               <div class="points-display">
                 <div
@@ -147,7 +133,6 @@
               </div>
             </div>
 
-            <!-- Quick Stats -->
             <div class="quick-stats mt-4">
               <div class="stat-item">
                 <div class="stat-icon">📚</div>
@@ -169,13 +154,12 @@
             </div>
           </v-card>
 
-          <!-- Achievement Badges Card -->
           <v-card class="mt-6 badges-card magic-card" elevation="16">
             <div class="card-glow glow-badges"></div>
 
             <v-card-title class="card-header">
-              <div class="header-icon rotate-animation">🏆</div>
-              <span class="header-text">My Awesome Badges Collection</span>
+              <div class="header-icon">🏆</div>
+              <span class="header-text">My Awesome Badges</span>
             </v-card-title>
             <v-divider class="mx-4"></v-divider>
 
@@ -219,10 +203,10 @@
             </v-card-text>
 
             <v-card-text v-else class="empty-state pa-6">
-              <div class="empty-state-character bounce-animation">🗺️</div>
+              <div class="empty-state-character">🗺️</div>
               <h4 class="empty-state-title">Badge Adventure Awaits!</h4>
               <p class="empty-state-message">
-                Complete lessons and exercises to unlock amazing badges!
+                Complete lessons to unlock amazing badges!
                 <br />Your first badge is just one lesson away! 🎯
               </p>
               <v-btn
@@ -238,15 +222,13 @@
           </v-card>
         </v-col>
 
-        <!-- Right Column - Learning Journey -->
         <v-col cols="12" lg="8">
-          <!-- Learning Journey Card -->
           <v-card elevation="16" class="journey-card magic-card">
             <div class="card-glow glow-journey"></div>
 
             <v-card-title class="card-header">
-              <div class="header-icon pulse-animation">🚀</div>
-              <span class="header-text">Your Amazing Learning Journey</span>
+              <div class="header-icon">🚀</div>
+              <span class="header-text">Your Learning Journey</span>
               <v-spacer></v-spacer>
               <v-chip
                 color="green-accent-4"
@@ -259,11 +241,10 @@
             </v-card-title>
             <v-divider class="mx-4"></v-divider>
 
-            <!-- Progress Overview -->
             <div class="progress-overview pa-4">
               <div class="progress-bar-container">
-                <div class="progress-label">Overall Learning Progress</div>
-                <div class="progress-bar rainbow-progress">
+                <div class="progress-label">Overall Progress</div>
+                <div class="progress-bar">
                   <div
                     class="progress-fill"
                     :style="{ width: `${getOverallProgress()}%` }"
@@ -277,7 +258,6 @@
               </div>
             </div>
 
-            <!-- Lessons Progress List -->
             <v-list lines="three" class="transparent-list pa-4">
               <template
                 v-for="(item, index) in lessonProgress"
@@ -366,13 +346,12 @@
               </template>
             </v-list>
 
-            <!-- Empty State for Journey -->
             <div v-if="!lessonProgress.length" class="empty-state pa-8">
-              <div class="empty-state-character bounce-animation">🚀</div>
+              <div class="empty-state-character">🚀</div>
               <h4 class="empty-state-title">Your Learning Adventure Begins!</h4>
               <p class="empty-state-message">
-                Start your first lesson to see your amazing progress here!
-                <br />Every step forward makes you a learning champion! 🎯
+                Start your first lesson to see your progress here!
+                <br />Every step forward makes you a champion! 🎯
               </p>
               <v-btn
                 color="primary"
@@ -388,19 +367,18 @@
             </div>
           </v-card>
 
-          <!-- Motivational Section -->
           <v-card class="mt-6 motivation-card magic-card" elevation="16">
             <div class="card-glow glow-motivation"></div>
 
             <v-card-text class="pa-6">
               <div class="motivation-content text-center">
                 <div class="motivation-characters">
-                  <div class="main-character pulse-animation">🌟</div>
+                  <div class="main-character">🌟</div>
                   <div class="supporting-characters">
-                    <span class="support-char char-1 float-animation">🎨</span>
-                    <span class="support-char char-2 bounce-animation">🎯</span>
-                    <span class="support-char char-3 rotate-animation">🏆</span>
-                    <span class="support-char char-4 pulse-animation">🚀</span>
+                    <span class="support-char char-1">🎨</span>
+                    <span class="support-char char-2">🎯</span>
+                    <span class="support-char char-3">🏆</span>
+                    <span class="support-char char-4">🚀</span>
                   </div>
                 </div>
 
@@ -429,7 +407,6 @@
       </v-row>
     </v-container>
 
-    <!-- Success Messages -->
     <div class="success-messages">
       <div
         v-for="message in successMessages"
@@ -459,8 +436,10 @@ const apiError = ref(null);
 const successMessages = ref([]);
 const floatingShapes = ref([]);
 
-// Get the logged-in user from Vuex
+// Get the logged-in user and mute state from Vuex
 const currentUser = computed(() => store.getters.currentUser);
+// REFACTOR: Added a computed property to check the global mute state from Vuex.
+const isMuted = computed(() => store.getters.isMuted);
 
 // --- UI Helper Functions ---
 const getUserLevel = () => {
@@ -556,14 +535,14 @@ const formatDate = (date) => {
 const continueLearning = (lesson) => {
   playSound("click");
   showSuccessMessage("Let's continue your amazing journey! 🚀");
-  // Navigate to lesson
+  // Navigation is immediate, no artificial delays.
   router.push(`/lesson/${lesson.lessonId}`);
 };
 
 const reviewLesson = (lesson) => {
   playSound("click");
   showSuccessMessage("Great idea to review! 📚");
-  // Navigate to lesson review
+  // Navigation is immediate, no artificial delays.
   router.push(`/lesson/${lesson.lessonId}`);
 };
 
@@ -587,9 +566,7 @@ const fetchProfileData = async () => {
     apiError.value = null;
     const userId = currentUser.value.id;
 
-    // Add loading delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    // REFACTOR: Removed artificial 1-second delay to improve performance and load time.
     const profilePromise = apiClient.get(`/api/auth/${userId}/profile`);
     const progressPromise = apiClient.get(
       `/api/users/${userId}/progress/lessons`
@@ -633,6 +610,9 @@ const playSuccessSound = () => playSound("success");
 const playErrorSound = () => playSound("error");
 
 const playSound = (type) => {
+  // REFACTOR: Added a check for the global mute state before playing any sound.
+  if (isMuted.value) return;
+
   try {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -703,9 +683,11 @@ const showSuccessMessage = (text) => {
 
 // --- Generate Floating Shapes ---
 const generateFloatingShapes = () => {
+  // REFACTOR: Reduced number of floating elements from 20 to 8 to decrease visual clutter.
+  // REFACTOR: Increased animation duration to make movements slower and less distracting.
   const emojis = ["⭐", "🏆", "📚", "🎯", "💎", "✨", "🌟", "🎨"];
   const shapes = [];
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 8; i++) {
     shapes.push({
       id: `shape-${i}`,
       emoji: emojis[i % emojis.length],
@@ -713,8 +695,8 @@ const generateFloatingShapes = () => {
         left: `${Math.random() * 100}vw`,
         top: `${Math.random() * 100}vh`,
         fontSize: `${Math.random() * 1.5 + 1}rem`,
-        animationDuration: `${Math.random() * 20 + 15}s`,
-        animationDelay: `${Math.random() * 15}s`,
+        animationDuration: `${Math.random() * 30 + 25}s`, // Slower animation
+        animationDelay: `${Math.random() * 20}s`,
       },
     });
   }
@@ -729,13 +711,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* REFACTOR: Changed primary font to 'Cairo' for better readability. */
 /* Base Styles */
 .profile-adventure-page {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  font-family: "Comic Neue", cursive;
+  font-family: "Cairo", sans-serif;
 }
 
 /* Floating Background Elements */
@@ -764,7 +747,7 @@ onMounted(() => {
   }
   10%,
   90% {
-    opacity: 0.6;
+    opacity: 0.5; /* Reduced opacity for subtlety */
   }
   100% {
     transform: translateY(-20vh) rotate(360deg);
@@ -813,28 +796,9 @@ onMounted(() => {
   transition: transform 0.3s ease;
 }
 
+/* REFACTOR: Continuous animations replaced with interaction-based :hover effects. */
 .main-mascot:hover {
-  transform: scale(1.15) rotate(5deg);
-}
-
-.bounce-animation {
-  animation: mascot-bounce 2s ease-in-out infinite;
-}
-
-@keyframes mascot-bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-20px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
+  transform: scale(1.15) rotate(5deg) translateY(-10px);
 }
 
 .mascot-speech-bubble {
@@ -852,6 +816,11 @@ onMounted(() => {
   font-size: 1.2rem;
   opacity: 0;
   animation: pulse-in 1s ease-in-out forwards 1.5s;
+  transition: transform 0.3s ease;
+}
+
+.mascot-container:hover .mascot-speech-bubble {
+  transform: translateX(-50%) scale(1.05);
 }
 
 .mascot-speech-bubble::after {
@@ -887,7 +856,9 @@ onMounted(() => {
 }
 
 /* Hero Titles & Subtitles */
+/* REFACTOR: Headline font set to 'Bungee' for primary titles. */
 .hero-title {
+  font-family: "Bungee", cursive;
   font-size: 3.5rem;
   font-weight: 900;
   letter-spacing: 2px;
@@ -1111,6 +1082,11 @@ onMounted(() => {
 .header-icon {
   font-size: 2rem;
   margin-right: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.card-header:hover .header-icon {
+  transform: scale(1.2) rotate(15deg);
 }
 
 /* Profile Card */
@@ -1370,9 +1346,8 @@ onMounted(() => {
   height: 100%;
   border-radius: 20px;
   background: linear-gradient(90deg, #43e97b, #38f9d7, #2196f3, #9c27b0);
-  background-size: 200% 200%;
+  background-size: 400% 400%; /* Increased size for a slower color transition */
   transition: width 1s ease-out;
-  animation: rainbow-bg 3s ease infinite;
   position: relative;
 }
 .progress-shine {
@@ -1412,7 +1387,7 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 16px;
   padding: 1rem;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.3s ease;
   opacity: 0;
   animation: lesson-fade-in 0.6s ease-out forwards;
   animation-delay: var(--animation-delay);
@@ -1431,6 +1406,7 @@ onMounted(() => {
 
 .lesson-progress-item:hover {
   background: rgba(0, 0, 0, 0.4);
+  transform: scale(1.02);
 }
 
 .lesson-icon-container {
@@ -1484,7 +1460,13 @@ onMounted(() => {
 .empty-state-character {
   font-size: 4rem;
   margin-bottom: 1rem;
+  transition: transform 0.3s ease;
 }
+
+.empty-state-character:hover {
+  transform: scale(1.2) rotate(-10deg);
+}
+
 .empty-state-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -1508,37 +1490,35 @@ onMounted(() => {
 .main-character {
   font-size: 4rem;
   display: inline-block;
+  transition: transform 0.3s ease;
+}
+.main-character:hover {
+  transform: scale(1.2);
 }
 .support-char {
   position: absolute;
   font-size: 2rem;
+  transition: transform 0.3s ease;
 }
+.support-char:hover {
+  transform: scale(1.4);
+}
+
 .char-1 {
   top: 0;
   left: 20%;
-  animation-delay: 0.2s;
 }
 .char-2 {
   top: 50%;
   left: 10%;
-  animation-delay: 0.4s;
 }
 .char-3 {
   top: 10%;
   right: 20%;
-  animation-delay: 0.6s;
 }
 .char-4 {
   top: 60%;
   right: 15%;
-  animation-delay: 0.8s;
-}
-
-.float-animation {
-  animation: mascot-bounce 3s ease-in-out infinite;
-}
-.rotate-animation {
-  animation: spin 4s linear infinite;
 }
 
 .motivation-title {
@@ -1564,10 +1544,11 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.3s;
 }
 .goal-item:hover {
   background: rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px);
 }
 .goal-icon {
   font-size: 1.5rem;
@@ -1577,22 +1558,8 @@ onMounted(() => {
 }
 
 /* General Animations & Effects */
-.pulse-animation {
-  animation: pulse-effect 2s infinite;
-}
-
-@keyframes pulse-effect {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
+/* REFACTOR: Removed animated rainbow text and replaced it with a static, high-contrast gradient. */
+/* The animation keyframe `rainbow-bg` has been removed. */
 .rainbow-text {
   background: linear-gradient(
     90deg,
@@ -1601,21 +1568,13 @@ onMounted(() => {
     #f7941d,
     #ffeb3b,
     #764ba2,
-    #667eea,
-    #f093fb
+    #667eea
   );
-  background-size: 200% auto;
+  background-size: 100% auto;
   color: #fff;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: rainbow-bg 4s linear infinite;
-}
-
-@keyframes rainbow-bg {
-  to {
-    background-position: 200% center;
-  }
 }
 
 /* Button Styles */

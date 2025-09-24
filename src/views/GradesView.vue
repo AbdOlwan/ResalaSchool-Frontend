@@ -1,54 +1,40 @@
 <template>
   <v-container fluid class="pa-0 grades-adventure-page">
-    <!-- Floating Background Elements -->
     <div class="floating-elements">
-      <div class="floating-shape star" v-for="n in 12" :key="'star-' + n">
+      <div class="floating-shape star" v-for="n in 4" :key="'star-' + n">
         ⭐
       </div>
-      <div class="floating-shape heart" v-for="n in 8" :key="'heart-' + n">
+      <div class="floating-shape heart" v-for="n in 2" :key="'heart-' + n">
         💖
       </div>
-      <div class="floating-shape rocket" v-for="n in 6" :key="'rocket-' + n">
+      <div class="floating-shape rocket" v-for="n in 1" :key="'rocket-' + n">
         🚀
-      </div>
-      <div class="floating-shape book" v-for="n in 4" :key="'book-' + n">
-        📚
-      </div>
-      <div class="floating-shape trophy" v-for="n in 3" :key="'trophy-' + n">
-        🏆
       </div>
     </div>
 
-    <!-- Header Section with Mascot -->
     <v-sheet
       class="hero-section d-flex align-center justify-center text-center"
       height="500"
     >
       <v-row justify="center" align="center">
         <v-col cols="12" md="10" lg="8">
-          <!-- Interactive Mascot -->
           <div class="mascot-container mb-6">
-            <div class="mascot bounce-animation" @click="playWelcomeSound">
-              🐻
-            </div>
+            <div class="mascot" @click="playWelcomeSound">🐻</div>
             <div class="mascot-speech-bubble">
               <span class="speech-text">Choose Your Learning Adventure!</span>
               <div class="bubble-sparkles">✨</div>
             </div>
           </div>
 
-          <!-- Main Title with Animation -->
           <h1 class="hero-title gradient-text mb-4">
             🌟 Select Your Grade Level 🌟
           </h1>
 
-          <!-- Subtitle -->
           <p class="hero-subtitle animate-fade-in mb-6">
             🎯 Every grade is a new adventure waiting for you!
             <br />🚀 Pick your level and start your amazing learning journey!
           </p>
 
-          <!-- Progress Indicator -->
           <div class="journey-progress mb-4">
             <div class="progress-step active">🏠 Home</div>
             <div class="progress-arrow">➜</div>
@@ -60,9 +46,7 @@
       </v-row>
     </v-sheet>
 
-    <!-- Main Content Container -->
     <v-container class="grades-container">
-      <!-- Loading State with Fun Animation -->
       <v-row v-if="isLoading" justify="center" class="my-8">
         <v-col cols="12" class="text-center">
           <div class="loading-mascot">
@@ -86,7 +70,6 @@
         </v-col>
       </v-row>
 
-      <!-- Error State with Friendly Character -->
       <v-row v-if="apiError" justify="center" class="my-8">
         <v-col cols="12" md="8">
           <div class="error-container">
@@ -108,7 +91,6 @@
         </v-col>
       </v-row>
 
-      <!-- Grades Grid -->
       <v-row
         v-if="!isLoading && !apiError"
         justify="center"
@@ -126,7 +108,7 @@
         >
           <div
             class="grade-card-wrapper"
-            :style="{ '--animation-delay': `${index * 200}ms` }"
+            :style="{ '--animation-delay': `${index * 150}ms` }"
           >
             <v-hover v-slot="{ isHovering, props }">
               <v-card
@@ -139,42 +121,28 @@
                 ]"
                 @click="navigateToGrade(grade.id, grade.name)"
               >
-                <!-- Card Glow Effect -->
                 <div
                   class="card-glow"
                   :class="`glow-${index % cardThemes.length}`"
                 ></div>
 
-                <!-- Floating Elements on Card -->
-                <div class="card-floaters">
-                  <div class="floater star">⭐</div>
-                  <div class="floater heart">💖</div>
-                  <div class="floater medal">🏅</div>
-                </div>
-
-                <!-- Card Header with Icon -->
                 <div
                   class="grade-header"
                   :class="`header-${index % cardThemes.length}`"
                 >
                   <div class="grade-icon-container">
-                    <div class="grade-icon bounce-hover">
+                    <div class="grade-icon">
                       {{ getIconForGrade(index) }}
                     </div>
                     <div class="icon-ring"></div>
-                    <div class="icon-sparkles">
-                      <span class="sparkle" v-for="n in 6" :key="n">✨</span>
-                    </div>
                   </div>
 
-                  <!-- Achievement Badge -->
                   <div class="achievement-badge">
                     <div class="badge-icon">🏆</div>
                     <span class="badge-text">Level {{ index + 1 }}</span>
                   </div>
                 </div>
 
-                <!-- Card Content -->
                 <v-card-title class="grade-title">
                   {{ grade.name }}
                 </v-card-title>
@@ -185,7 +153,6 @@
                     <br />🎯 Interactive games and fun challenges await!
                   </div>
 
-                  <!-- Features List -->
                   <div class="features-list mt-3">
                     <div class="feature-item">
                       <span class="feature-icon">📖</span>
@@ -202,7 +169,6 @@
                   </div>
                 </v-card-text>
 
-                <!-- Progress Section -->
                 <div class="grade-progress">
                   <div class="progress-label">Ready to explore!</div>
                   <div class="progress-bar-container">
@@ -220,7 +186,6 @@
                   </div>
                 </div>
 
-                <!-- Action Button -->
                 <v-card-actions class="justify-center pa-4">
                   <v-btn
                     variant="elevated"
@@ -231,26 +196,19 @@
                   >
                     <span class="btn-text">Let's Go!</span>
                     <v-icon end class="btn-icon">mdi-rocket-launch</v-icon>
-                    <div class="btn-sparkles">✨</div>
                   </v-btn>
                 </v-card-actions>
-
-                <!-- Hover Effects -->
-                <div v-if="isHovering" class="hover-effects">
-                  <div class="hover-particle" v-for="n in 8" :key="n"></div>
-                </div>
               </v-card>
             </v-hover>
           </div>
         </v-col>
       </v-row>
 
-      <!-- Motivation Section -->
       <v-row justify="center" class="mt-12 mb-8">
         <v-col cols="12" md="10" lg="8" class="text-center">
           <div class="motivation-section">
             <div class="motivation-character">
-              <div class="character-main pulse-animation">🌟</div>
+              <div class="character-main">🌟</div>
               <div class="character-friends">
                 <span class="friend friend-1">🚀</span>
                 <span class="friend friend-2">📚</span>
@@ -283,22 +241,6 @@
       </v-row>
     </v-container>
 
-    <!-- Success Celebration Overlay -->
-    <div v-if="showCelebration" class="celebration-overlay">
-      <div class="celebration-content">
-        <div class="celebration-character bounce-in">🎉</div>
-        <h2 class="celebration-title">Fantastic Choice!</h2>
-        <p class="celebration-message">
-          Get ready for an amazing learning adventure full of fun and discovery!
-        </p>
-        <div class="celebration-stars">
-          <span class="star" v-for="n in 5" :key="n">⭐</span>
-        </div>
-      </div>
-      <div class="confetti" v-for="n in 50" :key="n"></div>
-    </div>
-
-    <!-- Floating Success Messages -->
     <div class="success-messages">
       <div
         v-for="message in successMessages"
@@ -317,53 +259,30 @@ import { ref, onMounted, nextTick } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import apiClient from "@/services/api.js";
 
+// VUE-REFACTOR-NOTE: This is a placeholder for a global mute state.
+// It should be replaced with a real state management solution (e.g., Pinia, Vuex).
+// Example with Pinia:
+// import { useSettingsStore } from '@/stores/settings';
+// const settings = useSettingsStore();
+// const isMuted = computed(() => settings.isMuted);
+const isMuted = ref(false);
+
 // --- State Management ---
 const grades = ref([]);
 const isLoading = ref(true);
 const apiError = ref(null);
-const showCelebration = ref(false);
 const successMessages = ref([]);
 const router = useRouter();
 const route = useRoute();
 
 // --- Theming Data ---
 const cardThemes = [
-  {
-    color: "teal-darken-2",
-    icon: "🌊",
-    headerClass: "ocean-theme",
-    glowColor: "#00897b",
-  },
-  {
-    color: "deep-purple-accent-3",
-    icon: "🔮",
-    headerClass: "magic-theme",
-    glowColor: "#673ab7",
-  },
-  {
-    color: "amber-darken-3",
-    icon: "☀️",
-    headerClass: "sunshine-theme",
-    glowColor: "#ff8f00",
-  },
-  {
-    color: "pink-accent-2",
-    icon: "🌸",
-    headerClass: "flower-theme",
-    glowColor: "#e91e63",
-  },
-  {
-    color: "blue-darken-2",
-    icon: "🌌",
-    headerClass: "space-theme",
-    glowColor: "#1976d2",
-  },
-  {
-    color: "green-darken-2",
-    icon: "🌳",
-    headerClass: "nature-theme",
-    glowColor: "#388e3c",
-  },
+  { color: "teal-darken-2", icon: "🌊", glowColor: "#00897b" },
+  { color: "deep-purple-accent-3", icon: "🔮", glowColor: "#673ab7" },
+  { color: "amber-darken-3", icon: "☀️", glowColor: "#ff8f00" },
+  { color: "pink-accent-2", icon: "🌸", glowColor: "#e91e63" },
+  { color: "blue-darken-2", icon: "🌌", glowColor: "#1976d2" },
+  { color: "green-darken-2", icon: "🌳", glowColor: "#388e3c" },
 ];
 
 const motivationBadges = [
@@ -387,9 +306,7 @@ const fetchGrades = async () => {
   try {
     isLoading.value = true;
     apiError.value = null;
-
-    // Add some loading delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Keep delay for better UX on loading skeleton
 
     const response = await apiClient.get(
       `/api/EducationalContent/phases/${phaseId}/grades`
@@ -426,26 +343,22 @@ onMounted(async () => {
 const animateGradeCards = () => {
   const cards = document.querySelectorAll(".grade-card-wrapper");
   cards.forEach((card, index) => {
+    // Staggered animation for cards appearing
     setTimeout(() => {
       card.classList.add("animate-in");
-    }, index * 200);
+    }, index * 150);
   });
 };
 
 // --- Navigation ---
-const navigateToGrade = async (gradeId, gradeName) => {
+const navigateToGrade = (gradeId, gradeName) => {
   playClickSound();
-  showSuccessMessage("Great Choice! 🌟");
+  showSuccessMessage("Let's Go! 🚀");
 
-  // Show celebration
-  showCelebration.value = true;
-
-  // Navigate after celebration
-  setTimeout(() => {
-    showCelebration.value = false;
-    console.log(`Navigating to Grade ID: ${gradeId} (${gradeName})`);
-    router.push({ name: "Terms", params: { gradeId } });
-  }, 2500);
+  // VUE-REFACTOR-NOTE: CRITICAL CHANGE - Removed celebration overlay and setTimeout.
+  // Navigation is now instantaneous upon user click, eliminating artificial delays.
+  console.log(`Navigating to Grade ID: ${gradeId} (${gradeName})`);
+  router.push({ name: "Terms", params: { gradeId } });
 };
 
 // --- UI Helper Functions ---
@@ -468,6 +381,11 @@ const playSuccessSound = () => playSound("success");
 const playErrorSound = () => playSound("error");
 
 const playSound = (type) => {
+  // VUE-REFACTOR-NOTE: Added a check for the global mute state before playing any sound.
+  if (isMuted.value) {
+    return;
+  }
+
   try {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -517,7 +435,7 @@ const playSound = (type) => {
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + 0.5);
   } catch (error) {
-    console.log("Audio not supported");
+    console.warn("Web Audio API is not supported in this browser.");
   }
 };
 
@@ -542,13 +460,19 @@ const showSuccessMessage = (text) => {
 </script>
 
 <style scoped>
+/* VUE-REFACTOR-NOTE:
+   It's recommended to import these fonts in your main CSS file or index.html.
+   @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Bungee&display=swap');
+*/
+
 /* --- Base Styles --- */
 .grades-adventure-page {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  font-family: "Comic Neue", cursive;
+  /* VUE-REFACTOR-NOTE: Primary font changed to Cairo for better readability. */
+  font-family: "Cairo", sans-serif;
 }
 
 /* --- Floating Background Elements --- */
@@ -565,8 +489,9 @@ const showSuccessMessage = (text) => {
 .floating-shape {
   position: absolute;
   font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-  animation: float-around 20s ease-in-out infinite;
-  opacity: 0.6;
+  /* VUE-REFACTOR-NOTE: Animation is now slower and less distracting. */
+  animation: float-around 45s ease-in-out infinite;
+  opacity: 0.4;
 }
 
 /* Randomize floating element positions */
@@ -578,69 +503,50 @@ const showSuccessMessage = (text) => {
 .floating-shape.star:nth-child(2) {
   top: 20%;
   left: 85%;
-  animation-delay: -2s;
+  animation-delay: -8s;
 }
 .floating-shape.star:nth-child(3) {
   top: 60%;
   left: 10%;
-  animation-delay: -4s;
+  animation-delay: -15s;
 }
 .floating-shape.star:nth-child(4) {
   bottom: 30%;
   right: 15%;
-  animation-delay: -6s;
-}
-.floating-shape.star:nth-child(5) {
-  top: 80%;
-  left: 75%;
-  animation-delay: -8s;
-}
-.floating-shape.star:nth-child(6) {
-  top: 40%;
-  left: 50%;
-  animation-delay: -10s;
+  animation-delay: -22s;
 }
 
 .floating-shape.heart:nth-child(1) {
   top: 15%;
   right: 20%;
-  animation-delay: -1s;
+  animation-delay: -5s;
 }
 .floating-shape.heart:nth-child(2) {
   bottom: 20%;
   left: 30%;
-  animation-delay: -5s;
-}
-.floating-shape.heart:nth-child(3) {
-  top: 70%;
-  right: 40%;
-  animation-delay: -9s;
+  animation-delay: -25s;
 }
 
 .floating-shape.rocket:nth-child(1) {
-  top: 30%;
-  left: 20%;
-  animation-delay: -3s;
-}
-.floating-shape.rocket:nth-child(2) {
   bottom: 40%;
   right: 25%;
-  animation-delay: -7s;
+  animation-delay: -30s;
 }
 
+/* VUE-REFACTOR-NOTE: Animation movement is less drastic for a calmer background. */
 @keyframes float-around {
   0%,
   100% {
     transform: translate(0, 0) rotate(0deg) scale(1);
   }
   25% {
-    transform: translate(15vw, -10vh) rotate(90deg) scale(1.2);
+    transform: translate(10vw, -8vh) rotate(60deg) scale(1.1);
   }
   50% {
-    transform: translate(10vw, -20vh) rotate(180deg) scale(0.8);
+    transform: translate(5vw, -15vh) rotate(120deg) scale(0.9);
   }
   75% {
-    transform: translate(-10vw, -15vh) rotate(270deg) scale(1.1);
+    transform: translate(-8vw, -10vh) rotate(180deg) scale(1);
   }
 }
 
@@ -678,31 +584,12 @@ const showSuccessMessage = (text) => {
   cursor: pointer;
   display: inline-block;
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .mascot:hover {
-  transform: scale(1.15);
-}
-
-.bounce-animation {
-  animation: mascot-bounce 2s ease-in-out infinite;
-}
-
-@keyframes mascot-bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-20px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
+  /* VUE-REFACTOR-NOTE: Interaction-based bounce effect. */
+  transform: scale(1.15) translateY(-10px);
 }
 
 .mascot-speech-bubble {
@@ -742,11 +629,9 @@ const showSuccessMessage = (text) => {
 @keyframes bubble-float {
   0%,
   100% {
-    opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    opacity: 0.9;
     transform: translateX(-50%) translateY(-8px);
   }
 }
@@ -762,8 +647,9 @@ const showSuccessMessage = (text) => {
 
 /* --- Typography --- */
 .hero-title {
+  /* VUE-REFACTOR-NOTE: Bungee font for headlines as per requirement. */
+  font-family: "Bungee", cursive;
   font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
   line-height: 1.2;
   position: relative;
@@ -771,22 +657,13 @@ const showSuccessMessage = (text) => {
 }
 
 .gradient-text {
+  /* VUE-REFACTOR-NOTE: Removed distracting animated gradient shift. */
   background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
-  background-size: 300% 300%;
+  background-size: 200% 200%;
+  background-position: 50% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-shift 4s ease-in-out infinite;
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
 }
 
 .hero-subtitle {
@@ -871,16 +748,13 @@ const showSuccessMessage = (text) => {
   text-align: center;
   margin-bottom: 2rem;
 }
-
 .loading-character {
   font-size: 4rem;
   margin-bottom: 1rem;
 }
-
 .spin-animation {
   animation: loading-spin 2s linear infinite;
 }
-
 @keyframes loading-spin {
   from {
     transform: rotate(0deg);
@@ -889,18 +763,15 @@ const showSuccessMessage = (text) => {
     transform: rotate(360deg);
   }
 }
-
 .loading-text {
   font-size: 1.8rem;
   margin-bottom: 1rem;
 }
-
 .loading-dots {
   display: flex;
   justify-content: center;
   gap: 8px;
 }
-
 .dot {
   width: 12px;
   height: 12px;
@@ -908,7 +779,6 @@ const showSuccessMessage = (text) => {
   background: #ffd700;
   animation: loading-bounce 1.5s ease-in-out infinite;
 }
-
 .dot:nth-child(1) {
   animation-delay: 0s;
 }
@@ -918,7 +788,6 @@ const showSuccessMessage = (text) => {
 .dot:nth-child(3) {
   animation-delay: 0.4s;
 }
-
 @keyframes loading-bounce {
   0%,
   80%,
@@ -931,17 +800,14 @@ const showSuccessMessage = (text) => {
     opacity: 1;
   }
 }
-
 .loading-card {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
 }
-
 .skeleton-animated {
   border-radius: 20px;
 }
-
 .loading-sparkle {
   position: absolute;
   top: 10px;
@@ -949,7 +815,6 @@ const showSuccessMessage = (text) => {
   font-size: 1.5rem;
   animation: sparkle-pulse 1s ease-in-out infinite alternate;
 }
-
 @keyframes sparkle-pulse {
   from {
     transform: scale(1);
@@ -966,12 +831,10 @@ const showSuccessMessage = (text) => {
   text-align: center;
   margin-top: 2rem;
 }
-
 .error-character {
   font-size: 6rem;
   animation: shake-animation 0.5s infinite;
 }
-
 @keyframes shake-animation {
   0%,
   100% {
@@ -987,7 +850,6 @@ const showSuccessMessage = (text) => {
     transform: translateX(-5px);
   }
 }
-
 .error-card {
   background: rgba(255, 255, 255, 0.9);
   padding: 2rem;
@@ -995,20 +857,17 @@ const showSuccessMessage = (text) => {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border: 2px solid #ff4d4d;
 }
-
 .error-title {
   font-size: 2rem;
   color: #ff4d4d;
   font-weight: bold;
   margin-bottom: 1rem;
 }
-
 .error-message {
   font-size: 1.1rem;
   color: #555;
   margin-bottom: 1.5rem;
 }
-
 .retry-btn {
   font-weight: bold;
   text-transform: none;
@@ -1048,22 +907,12 @@ const showSuccessMessage = (text) => {
   overflow: hidden;
   border: 4px solid rgba(255, 255, 255, 0.2);
   transform-style: preserve-3d;
-  animation: card-float 6s ease-in-out infinite;
+  /* VUE-REFACTOR-NOTE: Removed continuous floating animation for performance and reduced cognitive load. */
 }
 
 .grade-card--hover {
-  transform: scale(1.05) rotateX(5deg) rotateY(5deg) !important;
+  transform: scale(1.05) translateY(-10px) !important;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3) !important;
-}
-
-@keyframes card-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 /* Card Glow Effect */
@@ -1087,66 +936,22 @@ const showSuccessMessage = (text) => {
 }
 
 .glow-0 {
-  background: radial-gradient(circle, #00897b, transparent);
+  background: #00897b;
 }
 .glow-1 {
-  background: radial-gradient(circle, #673ab7, transparent);
+  background: #673ab7;
 }
 .glow-2 {
-  background: radial-gradient(circle, #ff8f00, transparent);
+  background: #ff8f00;
 }
 .glow-3 {
-  background: radial-gradient(circle, #e91e63, transparent);
+  background: #e91e63;
 }
 .glow-4 {
-  background: radial-gradient(circle, #1976d2, transparent);
+  background: #1976d2;
 }
 .glow-5 {
-  background: radial-gradient(circle, #388e3c, transparent);
-}
-
-/* Card Floaters */
-.card-floaters {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.floater {
-  position: absolute;
-  font-size: 1.5rem;
-  opacity: 0.7;
-  animation: floater-move 10s linear infinite;
-}
-
-.floater.star {
-  top: 10%;
-  left: 20%;
-  animation-delay: 0s;
-}
-.floater.heart {
-  bottom: 20%;
-  right: 15%;
-  animation-delay: -3s;
-}
-.floater.medal {
-  top: 50%;
-  right: 30%;
-  animation-delay: -6s;
-}
-
-@keyframes floater-move {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(10px, -20px) rotate(180deg);
-  }
+  background: #388e3c;
 }
 
 /* Card Headers */
@@ -1159,16 +964,6 @@ const showSuccessMessage = (text) => {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   overflow: hidden;
-}
-
-.grade-header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.5;
 }
 
 .header-0 {
@@ -1207,18 +1002,8 @@ const showSuccessMessage = (text) => {
   transition: transform 0.3s ease;
 }
 
-.bounce-hover:hover {
-  animation: bounce-icon 0.6s ease-in-out;
-}
-
-@keyframes bounce-icon {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
+.grade-card--hover .grade-icon {
+  transform: scale(1.2) rotate(10deg);
 }
 
 .icon-ring {
@@ -1241,57 +1026,6 @@ const showSuccessMessage = (text) => {
   50% {
     transform: scale(1.1);
     opacity: 0.8;
-  }
-}
-
-.icon-sparkles {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-}
-
-.icon-sparkles .sparkle {
-  position: absolute;
-  font-size: 0.8rem;
-  animation: sparkle-move 1.5s linear infinite;
-  opacity: 0;
-}
-
-.icon-sparkles .sparkle:nth-child(1) {
-  top: 10%;
-  left: 20%;
-  animation-delay: 0s;
-}
-.icon-sparkles .sparkle:nth-child(2) {
-  top: 30%;
-  right: 10%;
-  animation-delay: 0.2s;
-}
-.icon-sparkles .sparkle:nth-child(3) {
-  bottom: 20%;
-  left: 40%;
-  animation-delay: 0.4s;
-}
-.icon-sparkles .sparkle:nth-child(4) {
-  bottom: 5%;
-  right: 25%;
-  animation-delay: 0.6s;
-}
-
-@keyframes sparkle-move {
-  0% {
-    transform: translate(0, 0) rotate(0);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(20px, -20px) rotate(180deg);
-    opacity: 0;
   }
 }
 
@@ -1413,11 +1147,11 @@ const showSuccessMessage = (text) => {
 }
 
 @keyframes shine-animation {
-  0% {
+  from {
     transform: translateX(-150%) skewX(-45deg);
   }
-  100% {
-    transform: translateX(150%) skewX(-45deg);
+  to {
+    transform: translateX(250%) skewX(-45deg);
   }
 }
 
@@ -1454,47 +1188,7 @@ const showSuccessMessage = (text) => {
 }
 
 .enter-btn:hover .btn-icon {
-  transform: translateX(5px);
-}
-
-.btn-sparkles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  font-size: 1.5rem;
-  animation: button-sparkle 1s ease-out;
-}
-
-@keyframes button-sparkle {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(2);
-    opacity: 0;
-  }
-}
-
-/* Hover Effects */
-.hover-effects {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.hover-particle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  animation: particle-fly 1.5s ease-out forwards;
-  opacity: 0;
+  transform: translateX(5px) rotate(15deg);
 }
 
 /* --- Motivation Section --- */
@@ -1514,25 +1208,17 @@ const showSuccessMessage = (text) => {
 .motivation-character {
   position: relative;
   margin-bottom: 1.5rem;
+  cursor: pointer;
 }
 
 .character-main {
   font-size: 5rem;
-  animation: pulse-animation 2s infinite;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.pulse-animation {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+/* VUE-REFACTOR-NOTE: Interaction-based animation. */
+.motivation-character:hover .character-main {
+  transform: scale(1.2);
 }
 
 .character-friends {
@@ -1561,11 +1247,10 @@ const showSuccessMessage = (text) => {
 }
 
 @keyframes friend-orbit {
-  0%,
-  100% {
+  from {
     transform: rotate(0deg) translateX(50px) rotate(0deg);
   }
-  100% {
+  to {
     transform: rotate(360deg) translateX(50px) rotate(-360deg);
   }
 }
@@ -1616,146 +1301,6 @@ const showSuccessMessage = (text) => {
   color: white;
 }
 
-/* --- Success Celebration Overlay --- */
-.celebration-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(5px);
-}
-
-.celebration-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  transform: scale(0.8);
-  opacity: 0;
-  animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-}
-
-@keyframes pop-in {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.celebration-character {
-  font-size: 5rem;
-  animation: bounce-in 1s cubic-bezier(0.2, 0.8, 0.4, 1.2);
-}
-
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.celebration-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #4caf50;
-  margin-bottom: 1rem;
-}
-
-.celebration-message {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 1.5rem;
-}
-
-.celebration-stars {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.celebration-stars .star {
-  font-size: 1.5rem;
-  animation: star-spin 1s ease-in-out infinite alternate;
-}
-
-@keyframes star-spin {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(360deg) scale(1.2);
-  }
-}
-
-/* Confetti Effect */
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #f00;
-  border-radius: 50%;
-  animation: confetti-fall 3s linear infinite;
-  opacity: 0;
-}
-.confetti:nth-child(1) {
-  top: 0%;
-  left: 10%;
-  background: #ffeb3b;
-  animation-delay: 0s;
-}
-.confetti:nth-child(2) {
-  top: 0%;
-  left: 20%;
-  background: #4caf50;
-  animation-delay: 0.5s;
-}
-.confetti:nth-child(3) {
-  top: 0%;
-  left: 30%;
-  background: #2196f3;
-  animation-delay: 1s;
-}
-.confetti:nth-child(4) {
-  top: 0%;
-  left: 40%;
-  background: #ff5722;
-  animation-delay: 1.5s;
-}
-.confetti:nth-child(5) {
-  top: 0%;
-  left: 50%;
-  background: #9c27b0;
-  animation-delay: 2s;
-}
-
-@keyframes confetti-fall {
-  0% {
-    transform: translateY(-100vh) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
 /* Floating Success Messages */
 .success-messages {
   position: fixed;
@@ -1764,7 +1309,7 @@ const showSuccessMessage = (text) => {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 20;
+  z-index: 1001;
 }
 
 .success-message {
@@ -1773,16 +1318,19 @@ const showSuccessMessage = (text) => {
   font-weight: bold;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
   animation: float-up-fade 3s ease-out forwards;
 }
 
 @keyframes float-up-fade {
   0% {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
   100% {
-    transform: translateY(-50px);
+    transform: translateY(-60px) scale(0.8);
     opacity: 0;
   }
 }

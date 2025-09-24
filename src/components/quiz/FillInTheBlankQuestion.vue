@@ -5,7 +5,8 @@
       <v-text-field
         v-model="studentAnswer"
         placeholder="Answer"
-        variant="underlined"
+        variant="solo"
+        rounded="lg"
         class="answer-input"
         :class="validationClass"
         :disabled="submitted"
@@ -87,6 +88,7 @@ watch(
   text-align: center;
   color: #333;
   line-height: 2;
+  font-family: "Lexend", "Comic Neue", sans-serif;
 }
 
 .answer-input {
@@ -95,9 +97,8 @@ watch(
   margin: 0 0.5rem;
   font-size: 1.5rem;
   font-weight: bold;
-  font-family: "Comic Neue", cursive;
+  font-family: "Lexend", "Comic Neue", sans-serif;
   text-align: center;
-  transform: translateY(8px);
 }
 
 :deep(.v-input__control .v-field__input) {
@@ -120,35 +121,55 @@ watch(
   color: #f44336 !important;
 }
 
-@keyframes bounce-in {
+/* Animate the correct answer message appearing */
+:deep(.v-input.incorrect .v-messages) {
+  animation: fade-pop-in 0.5s ease-out;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 8px;
+}
+
+@keyframes fade-pop-in {
   0% {
-    transform: scale(0.9) translateY(8px);
-  }
-  50% {
-    transform: scale(1.1) translateY(8px);
+    opacity: 0;
+    transform: scale(0.8);
   }
   100% {
-    transform: scale(1) translateY(8px);
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
 @keyframes shake {
   10%,
   90% {
-    transform: translateX(-1px) translateY(8px);
+    transform: translateX(-1px);
   }
   20%,
   80% {
-    transform: translateX(2px) translateY(8px);
+    transform: translateX(2px);
   }
   30%,
   50%,
   70% {
-    transform: translateX(-3px) translateY(8px);
+    transform: translateX(-3px);
   }
   40%,
   60% {
-    transform: translateX(3px) translateY(8px);
+    transform: translateX(3px);
   }
 }
 </style>

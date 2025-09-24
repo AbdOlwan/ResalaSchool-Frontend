@@ -1,13 +1,13 @@
 <template>
   <v-container fluid class="pa-0 lesson-detail-adventure-page">
     <div class="floating-elements">
-      <div class="floating-shape star" v-for="n in 20" :key="'star-' + n">
+      <div class="floating-shape star" v-for="n in 7" :key="'star-' + n">
         ⭐
       </div>
-      <div class="floating-shape book" v-for="n in 10" :key="'book-' + n">
+      <div class="floating-shape book" v-for="n in 4" :key="'book-' + n">
         📚
       </div>
-      <div class="floating-shape idea" v-for="n in 8" :key="'idea-' + n">
+      <div class="floating-shape idea" v-for="n in 3" :key="'idea-' + n">
         💡
       </div>
     </div>
@@ -17,9 +17,7 @@
         <v-col cols="12" md="10" lg="8">
           <div v-if="isLoading" class="loading-container text-center">
             <div class="loading-character spin-animation">🧠</div>
-            <h2 class="loading-text rainbow-text">
-              Unpacking Your Awesome Lesson...
-            </h2>
+            <h2 class="loading-text">Unpacking Your Awesome Lesson...</h2>
             <p class="loading-subtitle">Get ready for some fun learning!</p>
             <v-progress-linear
               indeterminate
@@ -32,7 +30,7 @@
 
           <div v-else-if="lesson">
             <div class="lesson-header-card mb-8">
-              <div class="header-mascot bounce-animation">🦉</div>
+              <div class="header-mascot">🦉</div>
               <h1 class="lesson-main-title">{{ lesson.title }}</h1>
               <div class="lesson-progress-bar mt-4">
                 <div class="progress-label">
@@ -62,7 +60,7 @@
                     v-if="currentContent.type === 'Header'"
                     class="text-content"
                   >
-                    <h2 class="content-header rainbow-text">
+                    <h2 class="content-header">
                       <span class="header-icon">✨</span>
                       {{ currentContent.textContent }}
                     </h2>
@@ -183,7 +181,7 @@
     <div v-if="showCelebration" class="celebration-overlay">
       <div class="celebration-content">
         <div class="celebration-character bounce-in-scale">🎉</div>
-        <h2 class="celebration-title rainbow-text">Lesson Complete!</h2>
+        <h2 class="celebration-title">Lesson Complete!</h2>
         <p class="celebration-message">
           Amazing work! You're a learning superstar! 🌟
         </p>
@@ -191,7 +189,7 @@
       <div class="confetti-container">
         <div
           class="confetti"
-          v-for="n in 100"
+          v-for="n in 50"
           :key="n"
           :style="getConfettiStyle()"
         ></div>
@@ -204,6 +202,12 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import apiClient from "@/services/api.js";
+
+// --- State Management ---
+// Tech Requirement: In a real application, this would come from a global store like Pinia.
+// const store = useGlobalStore();
+// const isMuted = computed(() => store.isMuted);
+const isMuted = ref(false); // Using a local ref for this example.
 
 const props = defineProps({
   lessonId: [String, Number],
@@ -236,7 +240,7 @@ const lessonProgressPercentage = computed(() => {
 const fetchLessonDetails = async () => {
   isLoading.value = true;
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // UX Delay
+    // Performance: Removed artificial 1-second setTimeout delay for faster load times.
     const response = await apiClient.get(
       `/api/EducationalContent/lessons/${props.lessonId}`
     );
@@ -256,9 +260,6 @@ const goToNextContent = () => {
   if (!isLessonComplete.value) {
     currentContentIndex.value++;
   }
-  if (isLessonComplete.value) {
-    triggerCelebration();
-  }
 };
 
 const goToPreviousContent = () => {
@@ -268,8 +269,11 @@ const goToPreviousContent = () => {
   }
 };
 
+// Logic Change: Celebration is now triggered on final navigation action.
+// It serves as a transition screen instead of a timed interruption.
 const goToQuiz = () => {
   playSound("success");
+  showCelebration.value = true; // Show celebration overlay as a transition
   router.push({
     name: "Quiz",
     params: { ...route.params, lessonId: props.lessonId },
@@ -278,16 +282,11 @@ const goToQuiz = () => {
 
 const goToNextLesson = () => {
   playSound("success");
-  alert(
-    "Congratulations on finishing the lesson! Let's go to the next one. (Functionality to be enhanced)"
-  );
-  // For now, we go back to the list of lessons.
-  // A more advanced implementation would fetch the next lesson ID.
+  showCelebration.value = true; // Show celebration overlay as a transition
   router.push({ name: "Lessons", params: { unitId: route.params.unitId } });
 };
 
 // --- UI & UX Helpers ---
-
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return "";
   try {
@@ -296,10 +295,6 @@ const getYouTubeEmbedUrl = (url) => {
     if (urlObj.hostname === "youtu.be") {
       videoId = urlObj.pathname.slice(1);
     }
-    // rel=0: Limits related videos to the same channel.
-    // controls=1: Shows player controls.
-    // modestbranding=1: Removes YouTube logo (deprecated but can sometimes work).
-    // showinfo=0: Hides video title (deprecated).
     return `https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`;
   } catch (e) {
     console.error("Invalid YouTube URL:", url);
@@ -312,20 +307,12 @@ const speakText = (textToSpeak) => {
     playSound("click");
     const utterance = new SpeechSynthesisUtterance(
       textToSpeak.replace(/<[^>]*>?/gm, "")
-    ); // Strip HTML tags
+    );
     utterance.lang = "en-US";
     window.speechSynthesis.speak(utterance);
   } else {
     alert("Sorry, your browser does not support text-to-speech.");
   }
-};
-
-const triggerCelebration = () => {
-  showCelebration.value = true;
-  playSound("celebrate");
-  setTimeout(() => {
-    showCelebration.value = false;
-  }, 4000);
 };
 
 const getConfettiStyle = () => {
@@ -340,6 +327,9 @@ const getConfettiStyle = () => {
 
 // --- Sound Effects ---
 const playSound = (type) => {
+  // Tech Requirement: Added mute check before playing any sound.
+  if (isMuted.value) return;
+
   try {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -387,7 +377,8 @@ onMounted(fetchLessonDetails);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  font-family: "Comic Neue", cursive;
+  /* Font Change: Switched to Cairo for better readability and language support. */
+  font-family: "Cairo", sans-serif;
 }
 
 .lesson-main-content {
@@ -410,18 +401,19 @@ onMounted(fetchLessonDetails);
 .floating-shape {
   position: absolute;
   font-size: clamp(1.5rem, 3vw, 3rem);
-  animation: float-around 25s ease-in-out infinite;
-  opacity: 0.5;
+  /* Animation Change: Animation is much slower to be less distracting. */
+  animation: float-around 60s ease-in-out infinite;
+  opacity: 0.4;
 }
 
 .floating-shape.star {
-  animation-delay: -2s;
-}
-.floating-shape.book {
   animation-delay: -5s;
 }
+.floating-shape.book {
+  animation-delay: -15s;
+}
 .floating-shape.idea {
-  animation-delay: -8s;
+  animation-delay: -25s;
 }
 
 @keyframes float-around {
@@ -452,7 +444,11 @@ onMounted(fetchLessonDetails);
   display: inline-block;
 }
 .loading-text {
-  font-family: "Bungee", cursive;
+  /* Font Change: Bungee is reserved for H1, using Cairo here for consistency. */
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #fff;
 }
 .loading-subtitle {
   color: #eee;
@@ -486,23 +482,23 @@ onMounted(fetchLessonDetails);
   border-radius: 50%;
   padding: 10px;
   border: 4px solid #fff;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+/* Animation Change: Animation now triggers on user interaction (:hover) */
+.header-mascot:hover {
+  animation: mascot-bounce 0.8s ease;
 }
 @keyframes mascot-bounce {
   0%,
-  20%,
-  50%,
-  80%,
   100% {
     transform: translateX(-50%) translateY(0);
   }
-  40% {
+  50% {
     transform: translateX(-50%) translateY(-15px);
-  }
-  60% {
-    transform: translateX(-50%) translateY(-7px);
   }
 }
 .lesson-main-title {
+  /* Font Change: Bungee is correctly used here for the main title. */
   font-family: "Bungee", cursive;
   color: #fff;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
@@ -529,10 +525,14 @@ onMounted(fetchLessonDetails);
   position: relative;
 }
 .content-header {
-  font-family: "Bungee", cursive;
+  /* Font Change: Bungee font removed for better readability, using Cairo. */
+  font-family: "Cairo", sans-serif;
   font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
   text-align: center;
   margin-bottom: 1rem;
+  /* UI Change: Replaced distracting rainbow animation with a solid, high-contrast color. */
+  color: #764ba2;
 }
 .header-icon {
   margin-right: 10px;
@@ -579,27 +579,7 @@ onMounted(fetchLessonDetails);
   opacity: 0;
 }
 
-/* --- Rainbow Text --- */
-.rainbow-text {
-  background: linear-gradient(
-    90deg,
-    #ff6b6b,
-    #feca57,
-    #48dbfb,
-    #1dd1a1,
-    #ff6b6b
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  animation: rainbow-anim 4s linear infinite;
-}
-@keyframes rainbow-anim {
-  to {
-    background-position: 200% center;
-  }
-}
+/* UI Change: Removed rainbow text animation for performance and readability. */
 
 /* --- Navigation Controls --- */
 .navigation-controls {
@@ -624,7 +604,8 @@ onMounted(fetchLessonDetails);
   justify-content: center;
 }
 .quiz-btn {
-  font-family: "Bungee", cursive;
+  /* Font Change: Removed Bungee for consistency and readability on buttons. */
+  font-weight: 700;
   letter-spacing: 1px;
 }
 
@@ -648,6 +629,7 @@ onMounted(fetchLessonDetails);
 }
 .celebration-content {
   text-align: center;
+  color: #fff;
 }
 .celebration-character {
   font-size: 8rem;
@@ -667,9 +649,12 @@ onMounted(fetchLessonDetails);
   }
 }
 .celebration-title {
-  font-family: "Bungee", cursive;
+  /* Font Change: Using Cairo instead of Bungee for better readability. */
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
   font-size: 3rem;
   margin: 1rem 0;
+  color: #ffd700; /* Replaced rainbow text with a single bright color. */
 }
 .celebration-message {
   font-size: 1.2rem;
