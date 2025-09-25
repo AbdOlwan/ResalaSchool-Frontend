@@ -217,6 +217,7 @@ const fetchPhases = async () => {
 
 // --- Lifecycle Hook ---
 onMounted(async () => {
+  window.scrollTo(0, 0);
   await fetchPhases();
   await nextTick();
   animatePhaseCards();

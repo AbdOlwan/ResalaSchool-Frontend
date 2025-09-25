@@ -253,6 +253,7 @@ const showError = (message) => {
 
 // --- LIFECYCLE HOOKS ---
 onMounted(async () => {
+  window.scrollTo(0, 0);
   await fetchUnits();
   await nextTick();
   const cards = document.querySelectorAll(".unit-item");

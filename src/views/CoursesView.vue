@@ -628,6 +628,7 @@ const showSuccessMessage = (text) => {
 };
 
 onMounted(async () => {
+  window.scrollTo(0, 0);
   generateFloatingShapes();
   await fetchCourses();
   await nextTick();

@@ -276,6 +276,7 @@ const fetchTerms = async () => {
 
 // --- Lifecycle Hook ---
 onMounted(async () => {
+  window.scrollTo(0, 0);
   await fetchTerms();
   // Animate cards after they are rendered
   await nextTick();

@@ -705,6 +705,7 @@ const generateFloatingShapes = () => {
 
 // --- Lifecycle Hook ---
 onMounted(() => {
+  window.scrollTo(0, 0);
   generateFloatingShapes();
   fetchProfileData();
 });

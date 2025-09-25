@@ -213,6 +213,7 @@ const playSound = (type) => {
 
 // --- API & Quiz Logic ---
 onMounted(() => {
+  window.scrollTo(0, 0);
   fetchQuiz();
 });
 

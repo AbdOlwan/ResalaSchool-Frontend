@@ -413,6 +413,7 @@ const showError = (message) => {
 
 // Lifecycle
 onMounted(async () => {
+  window.scrollTo(0, 0);
   generateFloatingShapes();
   await fetchLessons();
   await nextTick();

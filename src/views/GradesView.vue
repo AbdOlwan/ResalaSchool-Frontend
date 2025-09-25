@@ -330,6 +330,7 @@ const fetchGrades = async () => {
 
 // --- Lifecycle Hook ---
 onMounted(async () => {
+  window.scrollTo(0, 0);
   await fetchGrades();
   await nextTick();
   animateGradeCards();
