@@ -5,27 +5,29 @@
       variant="flat"
       class="mute-button"
       @click="toggleMute"
-      :color="isMuted ? 'red' : 'primary'"
+      :color="isMuted ? 'grey' : 'white'"
       aria-label="Toggle Sound"
     >
-      <v-icon>{{ isMuted ? "mdi-volume-off" : "mdi-volume-high" }}</v-icon>
+      <v-icon color="primary">{{
+        isMuted ? "mdi-volume-off" : "mdi-volume-high"
+      }}</v-icon>
     </v-btn>
 
     <div class="floating-elements">
-      <div class="floating-shape star" v-for="n in 5" :key="'star-' + n">
+      <div class="floating-shape star" v-for="n in 3" :key="'star-' + n">
         ⭐
       </div>
-      <div class="floating-shape rocket" v-for="n in 3" :key="'rocket-' + n">
+      <div class="floating-shape rocket" v-for="n in 2" :key="'rocket-' + n">
         🚀
       </div>
     </div>
 
     <v-sheet
       class="hero-section d-flex align-center justify-center text-center"
-      height="600"
+      min-height="600px"
     >
       <v-row justify="center" align="center">
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="10" lg="8">
           <div class="mascot-container">
             <div class="mascot" @click="playWelcomeSound" tabindex="0">🐻</div>
             <div class="mascot-speech-bubble">
@@ -33,31 +35,29 @@
             </div>
           </div>
 
-          <h1 class="hero-title static-gradient-text mb-4">
-            Welcome to Your Amazing Learning Adventure!
+          <h1 class="hero-title static-text-color mb-4">
+            Welcome to Your Learning Adventure!
           </h1>
 
-          <p class="hero-subtitle animate-fade-in mb-6">
-            🎯 Explore, learn, and have fun with Egyptian curriculum at Resala
-            Schools!
-            <br />🌟 Every lesson is a new adventure waiting for you!
+          <p class="hero-subtitle animate-fade-in mb-8">
+            Explore the Egyptian curriculum with fun lessons and activities at
+            Resala Schools.
           </p>
 
           <v-btn
-            color="amber-lighten-2"
+            color="amber"
             size="x-large"
-            class="adventure-btn mt-6"
+            class="adventure-btn"
             elevation="12"
             @click="scrollToPhases"
             prepend-icon="mdi-rocket-launch"
           >
             <span class="btn-text">Start My Adventure!</span>
-            <div class="btn-sparkles">✨</div>
           </v-btn>
 
-          <div class="achievement-preview mt-6">
+          <div class="achievement-preview mt-8">
             <div class="badge-container">
-              <div class="badge-spin-on-hover">🏆</div>
+              <div class="badge-icon">🏆</div>
               <span class="badge-text">Future Learning Champion!</span>
             </div>
           </div>
@@ -69,13 +69,10 @@
       <v-row justify="center" class="mb-8">
         <v-col cols="12" class="text-center">
           <div class="section-header">
-            <h2 class="section-title bounce-in">
-              🎭 Choose Your Learning Stage
-            </h2>
+            <h2 class="section-title bounce-in">Choose Your Learning Stage</h2>
             <div class="title-underline"></div>
             <p class="section-subtitle mt-4">
-              Pick your stage and start your educational journey with fun and
-              excitement!
+              Pick your stage to begin an exciting educational journey!
             </p>
           </div>
         </v-col>
@@ -83,13 +80,10 @@
 
       <v-row v-if="isLoading" justify="center">
         <v-col v-for="n in 3" :key="n" cols="12" sm="6" md="4">
-          <div class="loading-card">
-            <v-skeleton-loader
-              type="card, article"
-              class="skeleton-animated"
-            ></v-skeleton-loader>
-            <div class="loading-sparkle">✨</div>
-          </div>
+          <v-skeleton-loader
+            type="image, heading, paragraph, actions"
+            class="skeleton-animated"
+          ></v-skeleton-loader>
         </v-col>
       </v-row>
 
@@ -122,7 +116,7 @@
           cols="12"
           sm="6"
           md="4"
-          class="phase-col"
+          class="d-flex"
         >
           <div
             class="phase-card-wrapper"
@@ -131,55 +125,34 @@
             <v-hover v-slot="{ isHovering, props }">
               <v-card
                 v-bind="props"
-                :elevation="isHovering ? 24 : 8"
+                :elevation="isHovering ? 16 : 6"
                 class="phase-card"
                 :class="{ 'phase-card--hover': isHovering }"
                 @click="navigateToPhase(phase.id, phase.name)"
               >
-                <div class="card-glow" :class="`glow-${index % 3}`"></div>
+                <div class="card-header" :class="`bg-${index % 3}`">
+                  <div class="phase-icon">{{ getIconForPhase(index) }}</div>
+                </div>
                 <div class="card-content">
-                  <div class="card-icon-section">
-                    <div class="icon-background" :class="`bg-${index % 3}`">
-                      <div class="phase-icon">{{ getIconForPhase(index) }}</div>
-                    </div>
-                    <div class="icon-sparkles">
-                      <span class="sparkle" v-for="n in 4" :key="n">✨</span>
-                    </div>
-                  </div>
-                  <v-card-title class="phase-title text-center">{{
+                  <v-card-title class="phase-title">{{
                     phase.name
                   }}</v-card-title>
-                  <v-card-text class="phase-description text-center">
-                    🎨 Discover amazing lessons designed just for you!
-                    <br />🎯 Interactive activities and fun challenges await!
+                  <v-card-text class="phase-description">
+                    Discover interactive lessons and fun challenges designed
+                    just for you!
                   </v-card-text>
-                  <div class="progress-section">
-                    <div class="mini-progress">
-                      <div class="progress-bar">
-                        <div
-                          class="progress-fill"
-                          :style="{ width: getProgressWidth(index) }"
-                        ></div>
-                      </div>
-                      <span class="progress-text">Ready to explore!</span>
-                    </div>
-                  </div>
-                  <v-card-actions class="justify-center pa-6">
+                  <v-card-actions class="card-actions">
                     <v-btn
-                      variant="elevated"
+                      variant="flat"
                       :color="getColorForPhase(index)"
                       class="explore-btn"
                       size="large"
+                      block
                     >
-                      <span>Let's Go!</span>
-                      <v-icon end>mdi-arrow-right-circle</v-icon>
-                      <div class="btn-trail"></div>
+                      <span>Let's Go</span>
+                      <v-icon end>mdi-arrow-right-circle-outline</v-icon>
                     </v-btn>
                   </v-card-actions>
-                </div>
-                <div class="card-floaters">
-                  <div class="floater star">⭐</div>
-                  <div class="floater heart">💝</div>
                 </div>
               </v-card>
             </v-hover>
@@ -190,21 +163,11 @@
       <v-row justify="center" class="mt-12">
         <v-col cols="12" md="8" class="text-center">
           <div class="encouragement-section">
-            <h3 class="encouragement-title">
-              🌟 You're Going to Be Amazing! 🌟
-            </h3>
+            <h3 class="encouragement-title">🌟 You're Going to Be Amazing!</h3>
             <p class="encouragement-text">
               Every great learner starts with a single step. Click on your stage
-              above and begin your incredible journey of discovery!
+              and begin your incredible journey!
             </p>
-            <div class="encouragement-icons">
-              <span
-                class="encourage-icon"
-                v-for="icon in ['🎉', '🚀', '💫', '🏆', '🎯']"
-                :key="icon"
-                >{{ icon }}</span
-              >
-            </div>
           </div>
         </v-col>
       </v-row>
@@ -225,9 +188,6 @@ const isLoading = ref(true);
 const apiError = ref(null);
 const router = useRouter();
 
-// REFACTOR: Added mute state. In a real app, this would come from a global store like Pinia.
-// e.g., import { useSettingsStore } from '@/stores/settings';
-// const settings = useSettingsStore(); const { isMuted } = storeToRefs(settings);
 const isMuted = ref(false);
 const toggleMute = () => {
   isMuted.value = !isMuted.value;
@@ -271,8 +231,6 @@ const animatePhaseCards = () => {
 };
 
 // --- Navigation ---
-// REFACTOR: CRITICAL CHANGE - Removed artificial setTimeout delay and celebration overlay for instant navigation.
-// This creates a faster, more responsive user experience, adhering to the core principles.
 const navigateToPhase = (phaseId, phaseName) => {
   playClickSound();
   console.log(`Navigating instantly to phase: ${phaseName} (ID: ${phaseId})`);
@@ -283,7 +241,6 @@ const navigateToPhase = (phaseId, phaseName) => {
 const getIconForPhase = (index) => ["🌟", "📚", "🎨"][index % 3];
 const getColorForPhase = (index) =>
   ["teal-darken-1", "deep-purple-accent-2", "amber-darken-3"][index % 3];
-const getProgressWidth = (index) => ["85%", "92%", "78%"][index % 3];
 const scrollToPhases = () => {
   const element = document.getElementById("phases-section");
   if (element) {
@@ -298,7 +255,6 @@ const playSuccessSound = () => playSound("success");
 const playClickSound = () => playSound("click");
 
 const playSound = (type) => {
-  // REFACTOR: Added a check for the global 'isMuted' state before playing any sound.
   if (isMuted.value) {
     return;
   }
@@ -347,25 +303,25 @@ const playSound = (type) => {
 </script>
 
 <style scoped>
-/* --- Base Styles --- */
+/* --- UX REFINEMENT: Base Styles --- */
 .home-page {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  /* Softer, more elegant gradient that's less harsh on the eyes. */
+  background: linear-gradient(135deg, #7f8ff4 0%, #7e57c2 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  /* REFACTOR: Implemented 'Cairo' as the primary font for readability. */
   font-family: "Cairo", sans-serif;
 }
 
 .mute-button {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 16px;
+  right: 16px;
   z-index: 1000;
   border-radius: 50%;
 }
 
-/* --- Floating Background Elements --- */
+/* --- UX REFINEMENT: Floating Background Elements --- */
 .floating-elements {
   position: fixed;
   top: 0;
@@ -378,113 +334,86 @@ const playSound = (type) => {
 
 .floating-shape {
   position: absolute;
-  font-size: 2rem;
-  /* REFACTOR: Slowed down animation significantly to reduce distraction. */
-  animation: float-around 45s ease-in-out infinite;
-  opacity: 0.5;
+  font-size: 1.5rem; /* Smaller size */
+  animation: float-around 50s ease-in-out infinite; /* Slower animation */
+  opacity: 0.4; /* More subtle opacity */
 }
-
+/* Adjusted positions for a less cluttered feel */
 .floating-shape.star:nth-child(1) {
-  top: 10%;
-  left: 5%;
+  top: 15%;
+  left: 10%;
   animation-delay: 0s;
 }
 .floating-shape.star:nth-child(2) {
-  top: 50%;
+  top: 60%;
   right: 15%;
-  animation-delay: -6s;
-}
-.floating-shape.star:nth-child(3) {
-  bottom: 10%;
-  right: 5%;
   animation-delay: -8s;
 }
 .floating-shape.rocket:nth-child(1) {
   top: 80%;
   left: 20%;
-  animation-delay: -6s;
-}
-.floating-shape.rocket:nth-child(2) {
-  bottom: 25%;
-  right: 30%;
-  animation-delay: -10s;
+  animation-delay: -5s;
 }
 
 @keyframes float-around {
   0%,
   100% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
+    transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translate(10vw, -8vh) rotate(60deg) scale(1.1);
+    transform: translate(8vw, -10vh) rotate(45deg);
   }
   50% {
-    transform: translate(5vw, -15vh) rotate(120deg) scale(0.9);
+    transform: translate(4vw, -18vh) rotate(90deg);
   }
   75% {
-    transform: translate(-8vw, -10vh) rotate(180deg) scale(1);
+    transform: translate(-10vw, -8vh) rotate(135deg);
   }
 }
 
-/* --- Hero Section --- */
+/* --- UX REFINEMENT: Hero Section --- */
 .hero-section {
   position: relative;
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.9) 0%,
-    rgba(118, 75, 162, 0.9) 100%
-  );
-}
-
-.hero-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
-    repeat;
+  /* Removed the extra gradient layer for a cleaner look that uses the page background. */
+  background-color: transparent;
+  padding: 0 16px; /* Added padding for mobile */
 }
 
 /* --- Mascot --- */
 .mascot-container {
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
   z-index: 2;
 }
 
 .mascot {
-  font-size: 8rem;
+  /* Scaled down slightly for better balance */
+  font-size: clamp(5rem, 15vw, 7rem);
   cursor: pointer;
   display: inline-block;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .mascot:hover {
-  transform: scale(1.15) translateY(-10px);
+  transform: scale(1.1) rotate(5deg);
 }
 
 .mascot-speech-bubble {
   position: absolute;
-  top: -20px;
+  top: -15px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.95);
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 3px solid #ffd700;
-  font-size: 1rem;
-  font-weight: bold;
+  background: white;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
   color: #333;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  /* REFACTOR: Changed infinite bounce animation to an interaction-based one on hover for less distraction. */
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.mascot:hover .mascot-speech-bubble {
-  transform: translateX(-50%) translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  white-space: nowrap; /* Prevents text from wrapping on small screens */
 }
 
 .mascot-speech-bubble::after {
@@ -493,48 +422,44 @@ const playSound = (type) => {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border: 10px solid transparent;
-  border-top-color: #ffd700;
+  border: 8px solid transparent;
+  border-top-color: white;
 }
 
-/* --- Typography --- */
+.mascot:hover + .mascot-speech-bubble {
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* --- UX REFINEMENT: Typography --- */
 .hero-title {
-  /* REFACTOR: Applied 'Bungee' font for main page titles, as per requirements. */
   font-family: "Bungee", cursive;
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: normal; /* Bungee has its own weight */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  /* Adjusted clamp for better readability on mobile. It scales down more gracefully. */
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: normal;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   line-height: 1.2;
-  position: relative;
-  z-index: 2;
 }
 
-/* REFACTOR: Replaced animated rainbow text with a static, high-contrast gradient for readability and performance. */
-.static-gradient-text {
-  background: linear-gradient(45deg, #ffd700, #ff8c00);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Replaced distracting gradient with a high-contrast solid color for maximum readability. */
+.static-text-color {
+  color: #ffffff;
 }
 
 .hero-subtitle {
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 500;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-  line-height: 1.4;
-  z-index: 2;
-  position: relative;
-}
-
-.animate-fade-in {
-  animation: fade-in-up 1s ease-out 0.5s both;
+  /* Adjusted clamp for better mobile readability. */
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  line-height: 1.5;
+  max-width: 600px; /* Constrains line length for readability */
+  margin: 0 auto; /* Center the subtitle */
 }
 
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -542,221 +467,213 @@ const playSound = (type) => {
   }
 }
 
-/* --- Adventure Button --- */
+/* --- UX REFINEMENT: Adventure Button --- */
 .adventure-btn {
-  position: relative;
-  background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%) !important;
-  color: #333 !important;
-  font-size: 1.4rem !important;
+  /* Simplified button style for a cleaner, modern look. */
+  font-size: 1.2rem !important;
   font-weight: bold !important;
-  padding: 20px 40px !important;
-  border-radius: 50px !important;
+  border-radius: 28px !important;
   text-transform: none !important;
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
   transition: all 0.3s ease !important;
-  overflow: hidden;
-  z-index: 2;
 }
 
 .adventure-btn:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 35px rgba(255, 215, 0, 0.6) !important;
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* --- Achievement Preview --- */
+/* --- UX REFINEMENT: Achievement Preview --- */
 .badge-container {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 12px 24px;
-  border-radius: 25px;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.badge-spin-on-hover {
-  font-size: 2rem;
+.badge-icon {
+  font-size: 1.5rem;
   transition: transform 0.4s ease-in-out;
 }
-.badge-spin-on-hover:hover {
-  transform: rotate(15deg) scale(1.2);
+.badge-container:hover .badge-icon {
+  transform: rotate(10deg) scale(1.15);
 }
 
 .badge-text {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
-/* --- Phases Container --- */
+/* --- UX REFINEMENT: Phases Container --- */
 .phases-container {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 40px 40px 0 0;
-  padding: 60px 30px;
-  margin-top: -40px;
+  background: #f4f6fc; /* Changed to a soft, clean background color. */
+  border-radius: 30px 30px 0 0;
+  padding: 50px 20px;
+  margin-top: 30px;
   position: relative;
   z-index: 3;
 }
 
 /* --- Section Header --- */
 .section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   font-weight: 700;
-  color: white;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  color: #2c3e50; /* High contrast color for readability on the new background */
 }
 .title-underline {
-  width: 120px;
-  height: 6px;
-  background: linear-gradient(90deg, #ffd700, #ff6b6b);
+  width: 100px;
+  height: 5px;
+  background: linear-gradient(90deg, #7f8ff4, #7e57c2);
   border-radius: 3px;
-  margin: 16px auto;
+  margin: 12px auto;
 }
 .section-subtitle {
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: #546e7a;
   font-weight: 400;
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 /* --- Loading & Error Cards --- */
-.loading-card,
-.error-container {
-  text-align: center;
-}
 .skeleton-animated {
   border-radius: 20px;
+  background-color: #e0e0e0;
 }
 .error-character {
-  font-size: 4rem;
-  margin-bottom: 20px;
+  font-size: 3rem;
+  margin-bottom: 16px;
 }
 .custom-alert {
-  border-radius: 20px;
-  font-size: 1.1rem;
+  border-radius: 16px;
+  font-size: 1rem;
 }
 
-/* --- Phase Cards --- */
-.phase-col {
-  display: flex;
-}
+/* --- UX REFINEMENT: Complete Phase Card Redesign --- */
+/* This is the core of the redesign to address the "too large" card issue. */
 .phase-card-wrapper {
   width: 100%;
+  height: 100%;
   opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 0.6s ease-out,
-    transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(40px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  animation-delay: var(--animation-delay);
 }
+
 .phase-card-wrapper.animate-in {
   opacity: 1;
   transform: translateY(0);
-  animation-delay: var(--animation-delay);
 }
+
 .phase-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
   height: 100%;
-  border-radius: 25px !important;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.8) 100%
-  ) !important;
-  border: 3px solid transparent;
+  border-radius: 20px !important;
+  background-color: #ffffff !important;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
+  transition: all 0.3s ease;
   overflow: hidden;
+  border: 2px solid transparent;
 }
+
 .phase-card--hover {
-  transform: translateY(-15px) scale(1.03);
-  border-color: #ffd700;
+  transform: translateY(-10px);
+  border-color: #7f8ff4;
 }
-.card-content {
-  position: relative;
-  z-index: 2;
-  padding: 30px 20px;
-}
-.card-icon-section {
-  position: relative;
-  margin-bottom: 20px;
-}
-.icon-background {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+
+.card-header {
+  height: 120px; /* Defined height for the header */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
   transition: transform 0.3s ease;
 }
+.phase-card--hover .card-header {
+  transform: scale(1.05);
+}
 .bg-0 {
-  background: linear-gradient(135deg, #00bfa5, #26a69a);
+  background: linear-gradient(135deg, #4dd0e1, #26a69a);
 }
 .bg-1 {
-  background: linear-gradient(135deg, #673ab7, #9c27b0);
+  background: linear-gradient(135deg, #9575cd, #7e57c2);
 }
 .bg-2 {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
+  background: linear-gradient(135deg, #ffb74d, #f57c00);
 }
-.phase-card--hover .icon-background {
-  transform: scale(1.1) rotate(5deg);
-}
+
 .phase-icon {
-  font-size: 3.5rem;
-  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
+
+.card-content {
+  padding: 20px;
+  text-align: center;
+  flex-grow: 1; /* Allows content to fill space */
+  display: flex;
+  flex-direction: column;
+}
+
 .phase-title {
-  font-size: 1.8rem !important;
+  font-size: 1.5rem !important; /* Adjusted font size */
   font-weight: 700 !important;
   color: #2c3e50 !important;
+  line-height: 1.2;
 }
+
 .phase-description {
-  font-size: 1.1rem !important;
+  font-size: 0.95rem !important; /* Compact description font */
   color: #546e7a !important;
   line-height: 1.5 !important;
+  margin-top: 8px;
+  flex-grow: 1; /* Pushes button to the bottom */
+}
+
+.card-actions {
+  padding: 0;
+  margin-top: 20px;
+}
+
+.explore-btn {
+  font-weight: bold !important;
+  text-transform: none !important;
+  border-radius: 12px !important;
 }
 
 /* --- Encouragement Section --- */
 .encouragement-section {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border-radius: 25px;
-  padding: 40px 30px;
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 20px;
+  border: 1px solid #e0e0e0;
 }
 .encouragement-title {
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  color: white;
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  color: #2c3e50;
   font-weight: 700;
 }
 .encouragement-text {
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  color: rgba(255, 255, 255, 0.9);
-}
-.encouragement-icons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-.encourage-icon {
-  font-size: 2.5rem;
-  transition: transform 0.3s ease;
-}
-.encourage-icon:hover {
-  transform: scale(1.3);
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: #546e7a;
+  max-width: 600px;
+  margin: 8px auto 0;
 }
 
-/* REFACTOR: Removed all styles for celebration overlay and confetti. */
-
-/* --- Focus States for Accessibility --- */
+/* --- Accessibility --- */
 .adventure-btn:focus-visible,
 .explore-btn:focus-visible,
 .phase-card:focus-visible,
 .mascot:focus-visible {
-  outline: 4px solid #4ecdc4;
-  outline-offset: 4px;
+  outline: 3px solid #00bfa5;
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 </style>
