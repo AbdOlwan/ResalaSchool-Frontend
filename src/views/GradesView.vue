@@ -14,7 +14,7 @@
 
     <v-sheet
       class="hero-section d-flex align-center justify-center text-center"
-      height="500"
+      min-height="500px"
     >
       <v-row justify="center" align="center">
         <v-col cols="12" md="10" lg="8">
@@ -261,10 +261,6 @@ import apiClient from "@/services/api.js";
 
 // VUE-REFACTOR-NOTE: This is a placeholder for a global mute state.
 // It should be replaced with a real state management solution (e.g., Pinia, Vuex).
-// Example with Pinia:
-// import { useSettingsStore } from '@/stores/settings';
-// const settings = useSettingsStore();
-// const isMuted = computed(() => settings.isMuted);
 const isMuted = ref(false);
 
 // --- State Management ---
@@ -343,7 +339,6 @@ onMounted(async () => {
 const animateGradeCards = () => {
   const cards = document.querySelectorAll(".grade-card-wrapper");
   cards.forEach((card, index) => {
-    // Staggered animation for cards appearing
     setTimeout(() => {
       card.classList.add("animate-in");
     }, index * 150);
@@ -460,10 +455,8 @@ const showSuccessMessage = (text) => {
 </script>
 
 <style scoped>
-/* VUE-REFACTOR-NOTE:
-   It's recommended to import these fonts in your main CSS file or index.html.
-   @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Bungee&display=swap');
-*/
+/* UX-REFACTOR-NOTE: It is recommended to import these fonts in your main CSS file or index.html for better performance. */
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Bungee&display=swap");
 
 /* --- Base Styles --- */
 .grades-adventure-page {
@@ -471,7 +464,6 @@ const showSuccessMessage = (text) => {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  /* VUE-REFACTOR-NOTE: Primary font changed to Cairo for better readability. */
   font-family: "Cairo", sans-serif;
 }
 
@@ -489,9 +481,9 @@ const showSuccessMessage = (text) => {
 .floating-shape {
   position: absolute;
   font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-  /* VUE-REFACTOR-NOTE: Animation is now slower and less distracting. */
+  /* UX-REFACTOR-NOTE: Animation is now slower and less distracting for a calmer, more professional feel. */
   animation: float-around 45s ease-in-out infinite;
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 /* Randomize floating element positions */
@@ -515,7 +507,6 @@ const showSuccessMessage = (text) => {
   right: 15%;
   animation-delay: -22s;
 }
-
 .floating-shape.heart:nth-child(1) {
   top: 15%;
   right: 20%;
@@ -526,14 +517,13 @@ const showSuccessMessage = (text) => {
   left: 30%;
   animation-delay: -25s;
 }
-
 .floating-shape.rocket:nth-child(1) {
   bottom: 40%;
   right: 25%;
   animation-delay: -30s;
 }
 
-/* VUE-REFACTOR-NOTE: Animation movement is less drastic for a calmer background. */
+/* UX-REFACTOR-NOTE: Animation movement is less drastic for a calmer background. */
 @keyframes float-around {
   0%,
   100% {
@@ -560,6 +550,7 @@ const showSuccessMessage = (text) => {
     rgba(240, 147, 251, 0.95) 100%
   );
   overflow: hidden;
+  padding-bottom: 80px; /* UX-REFACTOR-NOTE: Added padding to prevent the grades grid from overlapping the hero content. */
 }
 
 .hero-section::before {
@@ -571,6 +562,7 @@ const showSuccessMessage = (text) => {
   bottom: 0;
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
     repeat;
+  z-index: 0;
 }
 
 /* --- Mascot Styles --- */
@@ -585,16 +577,16 @@ const showSuccessMessage = (text) => {
   display: inline-block;
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-top: 3rem;
 }
 
 .mascot:hover {
-  /* VUE-REFACTOR-NOTE: Interaction-based bounce effect. */
   transform: scale(1.15) translateY(-10px);
 }
 
 .mascot-speech-bubble {
   position: absolute;
-  top: -30px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.98);
@@ -607,6 +599,7 @@ const showSuccessMessage = (text) => {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   animation: bubble-float 3s ease-in-out infinite;
   min-width: 200px;
+  white-space: nowrap;
 }
 
 .mascot-speech-bubble::after {
@@ -647,9 +640,8 @@ const showSuccessMessage = (text) => {
 
 /* --- Typography --- */
 .hero-title {
-  /* VUE-REFACTOR-NOTE: Bungee font for headlines as per requirement. */
   font-family: "Bungee", cursive;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
   line-height: 1.2;
   position: relative;
@@ -657,17 +649,17 @@ const showSuccessMessage = (text) => {
 }
 
 .gradient-text {
-  /* VUE-REFACTOR-NOTE: Removed distracting animated gradient shift. */
+  /* UX-REFACTOR-NOTE: Removed distracting animated gradient shift for a cleaner, more professional look. */
   background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
   background-size: 200% 200%;
   background-position: 50% 50%;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   color: rgba(255, 255, 255, 0.95);
   font-weight: 600;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
@@ -693,17 +685,18 @@ const showSuccessMessage = (text) => {
 
 /* --- Journey Progress --- */
 .journey-progress {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
-  padding: 15px 25px;
+  padding: 12px 20px;
   border-radius: 50px;
   border: 2px solid rgba(255, 215, 0, 0.3);
   position: relative;
   z-index: 2;
+  flex-wrap: wrap; /* UX-REFACTOR-NOTE: Allows wrapping on small screens. */
 }
 
 .progress-step {
@@ -712,12 +705,13 @@ const showSuccessMessage = (text) => {
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  color: white;
 }
 
 .progress-step.active {
   background: rgba(76, 175, 80, 0.2);
-  color: #4caf50;
-  border: 2px solid #4caf50;
+  color: #c8e6c9;
+  border: 2px solid #81c784;
 }
 
 .progress-step.current {
@@ -879,10 +873,11 @@ const showSuccessMessage = (text) => {
 .grades-container {
   position: relative;
   z-index: 5;
+  padding-top: 2rem;
 }
 
 .grades-grid {
-  margin-top: -80px;
+  /* UX-REFACTOR-NOTE: Removed negative margin to fix overlapping issue. The hero section now has padding-bottom to create separation. */
   position: relative;
 }
 
@@ -907,7 +902,9 @@ const showSuccessMessage = (text) => {
   overflow: hidden;
   border: 4px solid rgba(255, 255, 255, 0.2);
   transform-style: preserve-3d;
-  /* VUE-REFACTOR-NOTE: Removed continuous floating animation for performance and reduced cognitive load. */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .grade-card--hover {
@@ -929,12 +926,10 @@ const showSuccessMessage = (text) => {
   transition: all 0.4s ease;
   z-index: -1;
 }
-
 .grade-card--hover .card-glow {
   opacity: 0.8;
   transform: scale(1.1);
 }
-
 .glow-0 {
   background: #00897b;
 }
@@ -964,8 +959,8 @@ const showSuccessMessage = (text) => {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   overflow: hidden;
+  flex-shrink: 0;
 }
-
 .header-0 {
   background-color: #009688;
 }
@@ -994,14 +989,12 @@ const showSuccessMessage = (text) => {
   justify-content: center;
   z-index: 10;
 }
-
 .grade-icon {
   font-size: 4rem;
   position: relative;
   z-index: 2;
   transition: transform 0.3s ease;
 }
-
 .grade-card--hover .grade-icon {
   transform: scale(1.2) rotate(10deg);
 }
@@ -1016,7 +1009,6 @@ const showSuccessMessage = (text) => {
   animation: ring-pulse 2s ease-in-out infinite;
   z-index: 1;
 }
-
 @keyframes ring-pulse {
   0%,
   100% {
@@ -1045,11 +1037,9 @@ const showSuccessMessage = (text) => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
-
 .grade-card--hover .achievement-badge {
   transform: scale(1.1);
 }
-
 .badge-icon {
   font-size: 1.1rem;
 }
@@ -1059,24 +1049,26 @@ const showSuccessMessage = (text) => {
   text-align: center;
   font-size: 1.6rem;
   font-weight: 800;
-  padding-bottom: 0 !important;
+  padding: 16px 16px 0 !important;
   color: #333;
+  flex-shrink: 0;
 }
-
 .grade-description {
   text-align: center;
   font-size: 0.9rem;
   color: #666;
   line-height: 1.5;
+  flex-grow: 1; /* UX-REFACTOR-NOTE: Allows this section to grow, pushing actions to the bottom. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-
 .features-list {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .feature-item {
   display: flex;
   align-items: center;
@@ -1088,7 +1080,6 @@ const showSuccessMessage = (text) => {
   color: #444;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
 .feature-icon {
   font-size: 1.1rem;
   margin-right: 5px;
@@ -1098,8 +1089,8 @@ const showSuccessMessage = (text) => {
 .grade-progress {
   padding: 0 16px;
   margin-top: 10px;
+  flex-shrink: 0;
 }
-
 .progress-label {
   font-size: 0.8rem;
   font-weight: bold;
@@ -1107,7 +1098,6 @@ const showSuccessMessage = (text) => {
   text-align: center;
   margin-bottom: 5px;
 }
-
 .progress-bar-container {
   display: flex;
   align-items: center;
@@ -1118,7 +1108,6 @@ const showSuccessMessage = (text) => {
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
 .progress-bar {
   flex-grow: 1;
   height: 100%;
@@ -1126,7 +1115,6 @@ const showSuccessMessage = (text) => {
   border-radius: 10px;
   overflow: hidden;
 }
-
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #4caf50, #8bc34a);
@@ -1134,7 +1122,6 @@ const showSuccessMessage = (text) => {
   transition: width 0.5s ease-in-out;
   position: relative;
 }
-
 .progress-shine {
   position: absolute;
   top: 0;
@@ -1145,7 +1132,6 @@ const showSuccessMessage = (text) => {
   transform: skewX(-45deg);
   animation: shine-animation 2s linear infinite;
 }
-
 @keyframes shine-animation {
   from {
     transform: translateX(-150%) skewX(-45deg);
@@ -1154,7 +1140,6 @@ const showSuccessMessage = (text) => {
     transform: translateX(250%) skewX(-45deg);
   }
 }
-
 .progress-percentage {
   font-size: 0.7rem;
   font-weight: bold;
@@ -1163,6 +1148,9 @@ const showSuccessMessage = (text) => {
 }
 
 /* Action Button */
+.v-card-actions {
+  flex-shrink: 0;
+}
 .enter-btn {
   border-radius: 50px !important;
   font-weight: bold !important;
@@ -1172,21 +1160,17 @@ const showSuccessMessage = (text) => {
   overflow: hidden;
   transition: all 0.3s ease;
 }
-
 .enter-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
-
 .btn-text {
   position: relative;
   z-index: 2;
 }
-
 .btn-icon {
   transition: transform 0.3s ease;
 }
-
 .enter-btn:hover .btn-icon {
   transform: translateX(5px) rotate(15deg);
 }
@@ -1204,55 +1188,52 @@ const showSuccessMessage = (text) => {
   position: relative;
   z-index: 2;
 }
-
 .motivation-character {
   position: relative;
   margin-bottom: 1.5rem;
   cursor: pointer;
 }
-
 .character-main {
   font-size: 5rem;
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-/* VUE-REFACTOR-NOTE: Interaction-based animation. */
 .motivation-character:hover .character-main {
   transform: scale(1.2);
 }
-
 .character-friends {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 150%;
-  height: 150%;
+  width: 100%;
+  height: 100%;
 }
-
 .friend {
   position: absolute;
   font-size: 2rem;
-  animation: friend-orbit 8s linear infinite;
+  transition: transform 0.5s ease-out;
 }
-
+/* UX-REFACTOR-NOTE: Replaced distracting orbit animation with a more elegant hover effect. */
 .friend-1 {
-  animation-delay: 0s;
+  top: 0;
+  left: 15%;
 }
 .friend-2 {
-  animation-delay: -2s;
+  top: 60%;
+  left: 80%;
 }
 .friend-3 {
-  animation-delay: -4s;
+  top: 70%;
+  left: 5%;
 }
-
-@keyframes friend-orbit {
-  from {
-    transform: rotate(0deg) translateX(50px) rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg) translateX(50px) rotate(-360deg);
-  }
+.motivation-character:hover .friend-1 {
+  transform: translate(-10px, -10px) rotate(-15deg);
+}
+.motivation-character:hover .friend-2 {
+  transform: translate(10px, 0px) rotate(15deg);
+}
+.motivation-character:hover .friend-3 {
+  transform: translate(-5px, 10px) rotate(-10deg);
 }
 
 .motivation-title {
@@ -1260,13 +1241,11 @@ const showSuccessMessage = (text) => {
   font-weight: 800;
   margin-bottom: 1rem;
 }
-
 .motivation-text {
   font-size: clamp(1rem, 2vw, 1.2rem);
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
 }
-
 .motivation-badges {
   display: flex;
   justify-content: center;
@@ -1274,7 +1253,6 @@ const showSuccessMessage = (text) => {
   flex-wrap: wrap;
   margin-top: 1.5rem;
 }
-
 .badge-item {
   display: flex;
   flex-direction: column;
@@ -1285,16 +1263,13 @@ const showSuccessMessage = (text) => {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
-
 .badge-item:hover {
   transform: scale(1.1);
 }
-
 .badge-emoji {
   font-size: 2.5rem;
   margin-bottom: 5px;
 }
-
 .badge-label {
   font-size: 0.8rem;
   font-weight: bold;
@@ -1311,7 +1286,6 @@ const showSuccessMessage = (text) => {
   pointer-events: none;
   z-index: 1001;
 }
-
 .success-message {
   position: absolute;
   font-size: 1.5rem;
@@ -1323,7 +1297,6 @@ const showSuccessMessage = (text) => {
   border-radius: 20px;
   animation: float-up-fade 3s ease-out forwards;
 }
-
 @keyframes float-up-fade {
   0% {
     transform: translateY(0) scale(1);
@@ -1332,6 +1305,63 @@ const showSuccessMessage = (text) => {
   100% {
     transform: translateY(-60px) scale(0.8);
     opacity: 0;
+  }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 600px) {
+  .hero-section {
+    padding-top: 2rem;
+    padding-bottom: 60px;
+    min-height: auto;
+  }
+
+  .mascot {
+    font-size: 5rem;
+  }
+
+  .mascot-speech-bubble {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    top: -20px;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .journey-progress {
+    padding: 10px 15px;
+    gap: 8px;
+  }
+
+  .progress-step {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .grades-container {
+    padding-top: 1rem;
+  }
+
+  .grade-title {
+    font-size: 1.4rem;
+  }
+
+  .grade-description {
+    font-size: 0.85rem;
+  }
+
+  .motivation-title {
+    font-size: 1.5rem;
+  }
+
+  .motivation-text {
+    font-size: 0.9rem;
   }
 }
 </style>
